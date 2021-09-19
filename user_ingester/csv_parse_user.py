@@ -33,6 +33,7 @@ def csv_to_users(file):
                         User(int(row[0]), str(row[1]), str(row[2]), str(row[3]), str(row[4]), str(row[5]), str(row[6])))
                 except ValueError:
                     print("Could not add user on line " + str(row_count) + ": " + str(row))
+                    print("Skipping line...\n")
                     continue
     return objects
 
