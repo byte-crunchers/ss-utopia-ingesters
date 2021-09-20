@@ -14,8 +14,9 @@ from database_helper import execute_scripts_from_file
 script_dir = os.path.dirname(__file__)
 
 csv_path = "C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/onethousand_users.csv"
-key_path = "C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/jdba_dbkey.json"
 h2_path = 'C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/h2_univ.json'
+sql_path = 'C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/mysql_key.json'
+
 
 # def connect_mysql():
 #     con_try = None
@@ -46,14 +47,5 @@ def connect(path):
 
 
 if __name__ == '__main__':
-    connection = connect(h2_path)
-    execute_scripts_from_file(os.path.join(script_dir, "SQL/H2DropUsers.sql"), connection)
-    execute_scripts_from_file(os.path.join(script_dir, "SQL/H2DropBranches.sql"), connection)
-    execute_scripts_from_file(os.path.join(script_dir, "SQL/H2DropSchema.sql"), connection)
-    table = "users"
-    populate_users(csv_to_users(csv_path), connection, table)
-    print(count_rows(table, connection))
-    clear_table(table, connection)
-    connection.commit()
-    connection.close()
+    connect(sql_path)
 
