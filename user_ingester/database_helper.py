@@ -42,6 +42,7 @@ def count_rows(table, count_conn):
 
 def execute_scripts_from_file(filename, conn):
     # Open and read the file as a single buffer
+    sql_file = None
     try:
         fd = open(filename, 'r')
         sql_file = fd.read()
