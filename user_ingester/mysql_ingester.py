@@ -6,6 +6,7 @@ import jaydebeapi
 from jaydebeapi import Error
 
 from database_helper import execute_scripts_from_file
+from user_ingester import populate_users, csv_to_users
 
 script_dir = os.path.dirname(__file__)
 
@@ -31,3 +32,5 @@ if __name__ == '__main__':
     sql_conn.jconn.setAutoCommit(False)
     execute_scripts_from_file(os.path.join(script_dir, "../sql/schema_mysql.sql"),
                               sql_conn)
+    populate_users(csv_to_users("../dummy_data/onethousand_users.csv"), sql_conn)
+    sql_conn.commit()
