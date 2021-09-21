@@ -1,4 +1,7 @@
 import csv
+import io
+import json
+from typing import List
 
 import jaydebeapi
 import mysql
@@ -56,8 +59,29 @@ def csv_to_users(file):
                     continue
     return user_list
 
+#
+# def parse_json_dict(json_dict: dict) -> User:
+#     json_user = User()
+#     account.user = json_dict["users_id"]
+#     account.account_type = json_dict["account_type"]
+#     account.balance = json_dict["balance"]
+#     account.payment_due = json_dict["payment_due"]
+#     account.due_date = json_dict["due_date"]
+#     account.limit = json_dict["limit"]
+#     account.interest = json_dict["debt_interest"]
+#     account.active = json_dict["active"]
+#     return account
+
+
+# def parse_file_json(f: io.TextIOWrapper) -> List:
+#     json_list = json.load(f)
+#     return_list = []
+#     for json_dict in json_list:
+#         return_list.append(parse_json_dict(json_dict))
+#     return return_list
+
 
 if __name__ == '__main__':
-    users = csv_to_users("DummyData/onethousand_users.csv")
+    users = csv_to_users("../dummy_data/onethousand_users.csv")
     for user in users:
         print(user.user_name)

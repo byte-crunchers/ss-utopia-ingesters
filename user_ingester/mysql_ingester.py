@@ -29,5 +29,5 @@ def connect(path):
 if __name__ == '__main__':
     sql_conn = connect(sql_path)
     sql_conn.jconn.setAutoCommit(False)
-    execute_scripts_from_file(os.path.join(script_dir, "SQL/schema_mysql.sql"),
+    execute_scripts_from_file(os.path.join(script_dir, "../sql/schema_mysql.sql"),
                               sql_conn)

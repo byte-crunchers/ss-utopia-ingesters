@@ -29,14 +29,14 @@ def connect_h2():
 
 # Test connection and create the schema
 def test_create_schema(connect_h2):
-    execute_scripts_from_file(os.path.join(script_dir, "SQL/schema_h2.sql"),
+    execute_scripts_from_file(os.path.join(script_dir, "../sql/schema_h2.sql"),
                               connect_h2)
     assert connect_h2
 
 
 def test_csv_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
-    populate_users(csv_to_users(os.path.join(script_dir, "DummyData/onethousand_users.csv")), connect_h2, table)
+    populate_users(csv_to_users(os.path.join(script_dir, "../dummy_data/onethousand_users.csv")), connect_h2, table)
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))

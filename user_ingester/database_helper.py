@@ -49,7 +49,7 @@ def execute_scripts_from_file(filename, conn):
         fd.close()
     except IOError:
         traceback.print_exc()
-    # all SQL commands (split on ';')
+    # all sql commands (split on ';')
     sql_commands = sql_file.split(';')
     # Execute every command from the input file
     curs = conn.cursor()
