@@ -33,7 +33,13 @@ def parse_json_dict(json_dict: dict) -> Account:
     account.active = json_dict["active"]
     return account
 
-def parse_file_json(f: io.TextIOWrapper) -> List:
+def parse_file_json(path) -> List:
+    try:
+        f = open(path, "r")
+    except:
+        print("error opening file")
+        return None
+
     json_list = json.load(f)
     return_list = []
     for json_dict in json_list:
@@ -130,10 +136,27 @@ def connect(path):
         print("There was a problem connecting to the database, please make sure the database information is correct!")
     return con_try
 
+def read_file(path, conn):
+    try:
+        ending = path.split('.')[-1].lower()
+    except:
+        print("Error finding file ending")
+        return
+    if ending == "json":
+        acc = parse_file_json(path)
+    elif ending == "xlsx":
+        acc = parse_file_xlsx(path)
+    else:
+        print ("Invalid file format")
+        return
+    write_accounts(acc, conn)
+
+
 if __name__ == "__main__":
+    read_file("dummy_data/accounts_shifted.xlsx", connect("dbkey.json"))
     #f = open("files/test_array.json")
     #accs = parse_file_json(f)
-    accs = parse_file_xlsx("dummy_accounts_shifted.xlsx")
-    conn = connect("dbkey.json")
-    write_accounts(accs, conn)
+    #accs = parse_file_xlsx("dummy_data/accounts_shifted.xlsx")
+    #conn = connect("dbkey.json")
+    #write_accounts(accs, conn)
     
