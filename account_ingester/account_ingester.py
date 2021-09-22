@@ -10,6 +10,7 @@ from jaydebeapi import Error
 from openpyxl import load_workbook
 from openpyxl import worksheet
 
+
 class Account:
     def __init__(self):
             self.user = None
@@ -46,8 +47,6 @@ def parse_file_json(path) -> List:
         return_list.append(parse_json_dict(json_dict))
     return return_list
 
-
-
 def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
     ret_list = []
     for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1]+7):
@@ -74,8 +73,6 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
         account.active = row[7].value
         ret_list.append(account)
     return ret_list
-
-
 
 def find_xlsx_bounds(ws: worksheet):
     row_num = 0
@@ -124,17 +121,19 @@ def write_accounts(accounts: List, conn: jaydebeapi.Connection) -> None:
             cur.execute(query, vals)
         except:
             print("could not write account with values " + vals)
-            
 
-def connect(path):
+def connect_mysql(path):
     con_try = None
     try:
         f = open(path, 'r')
         key = json.load(f)        
         con_try = jaydebeapi.connect(key["driver"], key["location"], key["login"], key["jar"] )
+        con_try.jconn.setAutoCommit(False)
     except Error:
         print("There was a problem connecting to the database, please make sure the database information is correct!")
     return con_try
+
+
 
 def read_file(path, conn):
     try:
@@ -153,7 +152,7 @@ def read_file(path, conn):
 
 
 if __name__ == "__main__":
-    read_file("dummy_data/accounts_shifted.xlsx", connect("dbkey.json"))
+    read_file("dummy_data/accounts_shifted.xlsx", connect_mysql("dbkey.json"))
     #f = open("files/test_array.json")
     #accs = parse_file_json(f)
     #accs = parse_file_xlsx("dummy_data/accounts_shifted.xlsx")
