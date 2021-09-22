@@ -1,0 +1,10 @@
+{
+    "users_id":1,
+    "account_type":"Basic Credit",
+    "balance":-420.00,
+    "payment_due":44.26,
+    "due_date":"2021-09-19",
+    "limit":-1498,
+    "debt_interest":0.089,
+    "active":1    
+}
