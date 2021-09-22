@@ -3,7 +3,7 @@ import os
 import time
 import datetime
 import json
-import io
+import csv
 from typing import List
 import jaydebeapi
 from jaydebeapi import Error
@@ -120,7 +120,36 @@ def write_accounts(accounts: List, conn: jaydebeapi.Connection) -> None:
         try:
             cur.execute(query, vals)
         except:
-            print("could not write account with values " + vals)
+            print("could not write account with values " + str(vals))
+
+def parse_file_csv(path: str) -> List:
+    with open(path, newline="") as acc_file:
+        reader = csv.reader(acc_file, delimiter=',')
+        row_count = 0
+        ret_list = [] #return list
+        for row in reader:
+            # Functionality for ingesting accouts
+            try:
+                account = Account()
+                account.user = row[0]
+                account.account_type = row[1]
+                account.balance = row[2]
+                account.payment_due = row[3]
+                if row[4] == '\\N':
+                    account.due_date = None
+                else:
+                    account.due_date = row[4]
+                if row[5] == '\\N':
+                    account.limit = None
+                else:
+                    account.limit = row[5]
+                account.interest = row[6]
+                account.active = row[7]
+                ret_list.append(account)
+            except:
+                print("Could not add account on line " + str(row_count) + ": " + str(row))
+                continue
+    return ret_list
 
 def connect_mysql(path):
     con_try = None
@@ -133,9 +162,7 @@ def connect_mysql(path):
         print("There was a problem connecting to the database, please make sure the database information is correct!")
     return con_try
 
-
-
-def read_file(path, conn):
+def read_file(path, conn): #ENTRY POINT
     try:
         ending = path.split('.')[-1].lower()
     except:
@@ -145,6 +172,8 @@ def read_file(path, conn):
         acc = parse_file_json(path)
     elif ending == "xlsx":
         acc = parse_file_xlsx(path)
+    elif ending == "csv":
+        acc = parse_file_csv(path)
     else:
         print ("Invalid file format")
         return
@@ -153,9 +182,3 @@ def read_file(path, conn):
 
 if __name__ == "__main__":
     read_file("dummy_data/accounts_shifted.xlsx", connect_mysql("dbkey.json"))
-    #f = open("files/test_array.json")
-    #accs = parse_file_json(f)
-    #accs = parse_file_xlsx("dummy_data/accounts_shifted.xlsx")
-    #conn = connect("dbkey.json")
-    #write_accounts(accs, conn)
-    
