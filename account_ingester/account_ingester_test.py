@@ -28,7 +28,13 @@ def test_parse_file_json():
     assert ret[1].limit == None #checking account so no limit
     assert ret[0].limit == -1498
 
-def test_xml():
+def test_parse_file_xml():
+    ret = ai.parse_file_xml("dummy_data/accounts.xml")
+    assert ret[1]
+    assert ret[1].limit == None #checking account so no limit
+    assert float(ret[0].limit) == -1498
+
+def test_xlsx():
     ret = ai.parse_file_xlsx("dummy_data/accounts.xlsx")
     assert ret[1]
     assert ret[1].limit == None #checking account so no limit

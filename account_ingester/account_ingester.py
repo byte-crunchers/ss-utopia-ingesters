@@ -1,8 +1,6 @@
-import shutil
-import os
-import time
-import datetime
+import xml.etree.ElementTree as eTree
 import json
+import traceback
 import csv
 from typing import List
 import jaydebeapi
@@ -149,6 +147,30 @@ def parse_file_csv(path: str) -> List:
             except:
                 print("Could not add account on line " + str(row_count) + ": " + str(row))
                 continue
+    return ret_list
+
+def parse_file_xml(path: str) -> List:
+    ret_list = []
+    try:
+        tree = eTree.parse(path)
+        root = tree.getroot()
+        for child in root:
+            try:
+                account = Account()
+                account.user = child.find('users_id').text
+                account.account_type = child.find('account_type').text
+                account.balance = child.find('balance').text
+                account.payment_due = child.find('payment_due').text
+                account.due_date = child.find('due_date').text
+                account.limit = child.find('limit').text
+                account.interest = child.find('debt_interest').text
+                account.active = child.find('active').text
+                ret_list.append(account)
+            except:
+                print("Could not add user")
+                print("Skipping line...\n")
+    except eTree.ParseError:
+        traceback.print_exc()
     return ret_list
 
 def connect_mysql(path):
