@@ -1,15 +1,17 @@
 import csv
+import json
+import traceback
+import xml.etree.ElementTree
+import xml.etree.ElementTree as eTree
+from typing import List
 
 import jaydebeapi
 import mysql
 from mysql.connector import Error
 
-path = "C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/onethousand_users.csv"
-
 
 class User:
-    def __init__(self, user_id, user_name, email, password, f_name, l_name, is_admin, is_active):
-        self.user_id = user_id
+    def __init__(self, user_name, email, password, f_name, l_name, is_admin, is_active):
         self.user_name = user_name
         self.email = email
         self.password = password
@@ -19,14 +21,14 @@ class User:
         self.is_active = is_active
 
     def to_string(self):
-        return str(
-            str(self.user_id) + ", " + self.user_name + ", " + self.email + ", " + self.password + ", " + self.f_name +
-            ", " + self.l_name + ", " + self.is_admin + "," + self.is_active)
+        return self.user_name, self.email, self.password, self.f_name, self.l_name, str(
+            self.is_admin), str(self.is_active)
 
 
 def populate_users(user_data, ing_conn):
     curs = ing_conn.cursor()
-    query = "INSERT INTO users(username, email, password, first_name, last_name, is_admin, active) VALUES(?,?,?,?,?,?,?)"
+    query = "INSERT INTO users(username, email, password, first_name, last_name, is_admin, active) VALUES(?,?,?,?,?," \
+            "?,?) "
     for usr in user_data:
         vals = (usr.user_name, usr.email, usr.password, usr.f_name, usr.l_name, usr.is_admin, usr.is_active)
         try:
@@ -46,7 +48,7 @@ def csv_to_users(file):
             # Functionality for ingesting users
             try:
                 user_list.append(
-                    User(int(row[0]), str(row[1]), str(row[2]), str(row[3]), str(row[4]), str(row[5]),
+                    User(str(row[1]), str(row[2]), str(row[3]), str(row[4]), str(row[5]),
                          str(row[6]), str(row[7])))
             except ValueError:
                 print("Could not add user on line " + str(row_count) + ": " + str(row))
@@ -55,28 +57,39 @@ def csv_to_users(file):
     return user_list
 
 
-if __name__ == '__main__':
-    users = csv_to_users("../dummy_data/onethousand_users.csv")
-    for user in users:
-        print(user.user_name)
-
-#
-# def parse_json_dict(json_dict: dict) -> User:
-#     json_user = User()
-#     account.user = json_dict["users_id"]
-#     account.account_type = json_dict["account_type"]
-#     account.balance = json_dict["balance"]
-#     account.payment_due = json_dict["payment_due"]
-#     account.due_date = json_dict["due_date"]
-#     account.limit = json_dict["limit"]
-#     account.interest = json_dict["debt_interest"]
-#     account.active = json_dict["active"]
-#     return account
+def parse_json_dict(json_dict: dict) -> User:
+    json_user = User(json_dict["username"], json_dict["email"], json_dict["password"],
+                     json_dict["first_name"], json_dict["last_name"], json_dict["is_admin"], json_dict["active"])
+    return json_user
 
 
-# def parse_file_json(f: io.TextIOWrapper) -> List:
-#     json_list = json.load(f)
-#     return_list = []
-#     for json_dict in json_list:
-#         return_list.append(parse_json_dict(json_dict))
-#     return return_list
+def parse_file_json(path) -> List:
+    f = None
+    try:
+        f = open(path, "r")
+    except IOError:
+        print("error opening file")
+    json_list = json.load(f)
+    return_list = []
+    for json_dict in json_list:
+        return_list.append(parse_json_dict(json_dict))
+    return return_list
+
+
+def parse_file_xml(path):
+    xml_user_list = []
+    try:
+        tree = eTree.parse(path)
+        root = tree.getroot()
+        for child in root:
+            try:
+                xml_user_list.append(
+                    User(child.find('username').text, child.find('email').text,
+                         child.find('password').text, child.find('first_name').text, child.find('last_name').text,
+                         child.find('is_admin').text, child.find('active').text))
+            except ValueError:
+                print("Could not add user:" + child.find('id').text)
+                print("Skipping line...\n")
+    except xml.etree.ElementTree.ParseError:
+        traceback.print_exc()
+    return xml_user_list

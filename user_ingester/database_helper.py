@@ -2,7 +2,6 @@ import traceback
 
 import jaydebeapi
 from mysql.connector import Error
-from mysql.connector import MySQLConnection
 
 
 def clear_table(table, clear_conn):

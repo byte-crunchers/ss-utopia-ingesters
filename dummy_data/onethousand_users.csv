@@ -1,5 +1,5 @@
 id,username,email,password,first_name,last_name,is_admin,active
-1,goofyFalcon4,candre2419@gmail.com,$2a$10$pNI/yHPR5kRvR4SUrNTsEuM9TidSq0Bt.TCT70DUZ6VGmPnAaDi8u,Andre,Clark,0,1
+1,goofyFalcon4,candre2419@csv.com,$2a$10$pNI/yHPR5kRvR4SUrNTsEuM9TidSq0Bt.TCT70DUZ6VGmPnAaDi8u,Andre,Clark,0,1
 2,wearyWasp5,sullivan.jacqueline8934@rice.net,$2a$10$BrNpqCKwsSk.CfRFUljZc.8bjmYMTKBoqOkGgWTzSBXEbSHLpYsNS,Jacqueline,Sullivan,0,1
 3,lazyCurlew6,thomas.anthony4207@hendricks.org,$2a$10$swOEsuIHEC.K/JYhzUSOreNdyh7PiXoyOuCLX8SsjGYQw5e7up9Da,Anthony,Thomas,1,1
 4,innocentChamois7,k.michael3513@bates.net,$2a$10$g8DgWIsZpA4zjTl9JcuRQO0uT3Yod1uNR1X9ZMLDOCo5oh2svNJiC,Michael,King,0,1
@@ -999,3 +999,8 @@ id,username,email,password,first_name,last_name,is_admin,active
 1004,wornoutEggs4,s.phillips4051@martin-cain.biz,$2a$10$NC533zVrUC537zDEEAJVoeqJDdNbHN1.6CTNZgEzOGEhMCF3OAmq6,Stephanie,Phillips,0,1
 1005,wingedPudding3,patel.taylor9382@collins.com,$2a$10$VDHqq8rj1UdKqBx2BjCxG.1WUzZQ.YMkkR8J/9lT11/uwtUggVvVe,Taylor,Patel,1,1
 1006,pleasedTacos2,m.sarah6112@williams.com,$2a$10$t.ZomdY07BRSR6btK2Qx/O9GtlMtGiURm53LjeWqz/QKM1Si0SPxu,Sarah,Miller,0,0
+1,goofyFalcon4,candre2419@csv.com,$2a$10$pNI/yHPR5kRvR4SUrNTsEuM9TidSq0Bt.TCT70DUZ6VGmPnAaDi8u,Andre,Clark,0,1
+2,wearyWasp5,sullivan.jacqueline8934@rice.net,$2a$10$BrNpqCKwsSk.CfRFUljZc.8bjmYMTKBoqOkGgWTzSBXEbSHLpYsNS,Jacqueline,Sullivan,0,1
+3,lazyCurlew6,thomas.anthony4207@hendricks.org,$2a$10$swOEsuIHEC.K/JYhzUSOreNdyh7PiXoyOuCLX8SsjGYQw5e7up9Da,Anthony,Thomas,1,1
+4,innocentChamois7,k.michael3513@bates.net,$2a$10$g8DgWIsZpA4zjTl9JcuRQO0uT3Yod1uNR1X9ZMLDOCo5oh2svNJiC,Michael,King,0,1
+5,thrilledPoultry2,b.lonnie3838@walton-boone.net,$2a$10$.iRw7oSphmcrhmBJ1iLt4.aLSNL8jW01sZFGfpxttsdwhiGsNknCy,Lonnie,Bullock,0,1

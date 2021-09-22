@@ -6,13 +6,15 @@ import jaydebeapi
 from jaydebeapi import Error
 
 from database_helper import execute_scripts_from_file
-from user_ingester import populate_users, csv_to_users
+from user_ingester import populate_users, csv_to_users, parse_file_json, parse_file_xml
 
 script_dir = os.path.dirname(__file__)
 
-csv_path = "C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/onethousand_users.csv"
-h2_path = 'C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/h2_univ.json'
 sql_path = 'C:/Users/meeha/OneDrive/Desktop/SmoothStack/Data/mysql_key.json'
+schema_path = os.path.join(script_dir, "../sql/schema_mysql.sql")
+csv_path = os.path.join(script_dir, "../dummy_data/onethousand_users.csv")
+json_path = os.path.join(script_dir, "../dummy_data/onethousand_users.json")
+xml_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xml")
 
 
 def connect(path):
@@ -30,7 +32,9 @@ def connect(path):
 if __name__ == '__main__':
     sql_conn = connect(sql_path)
     sql_conn.jconn.setAutoCommit(False)
-    execute_scripts_from_file(os.path.join(script_dir, "../sql/schema_mysql.sql"),
-                              sql_conn)
-    populate_users(csv_to_users("../dummy_data/onethousand_users.csv"), sql_conn)
+    execute_scripts_from_file(schema_path, sql_conn)
+    populate_users(csv_to_users(csv_path), sql_conn)
+    populate_users(parse_file_json(json_path), sql_conn)
+    populate_users(parse_file_xml(xml_path), sql_conn)
     sql_conn.commit()
+    sql_conn.close()
