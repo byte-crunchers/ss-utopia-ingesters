@@ -5,13 +5,14 @@ import pytest
 from jaydebeapi import Error
 
 from database_helper import execute_scripts_from_file, count_rows, clear_table
-from user_ingester import populate_users, csv_to_users, parse_file_json, parse_file_xml
+from user_ingester import read_file
 
 script_dir = os.path.dirname(__file__)
 schema_path = os.path.join(script_dir, "../sql/schema_h2.sql")
 csv_path = os.path.join(script_dir, "../dummy_data/onethousand_users.csv")
 json_path = os.path.join(script_dir, "../dummy_data/onethousand_users.json")
 xml_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xml")
+xlsx_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xlsx")
 table = "users"
 
 
@@ -41,7 +42,7 @@ def test_create_schema(connect_h2):
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
-    populate_users(csv_to_users(csv_path), connect_h2)
+    read_file(csv_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
@@ -51,7 +52,7 @@ def test_csv_ingest(connect_h2):
 # Test parsing json file and adding to database
 def test_json_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
-    populate_users(parse_file_json(json_path), connect_h2)
+    read_file(json_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
@@ -60,7 +61,16 @@ def test_json_ingest(connect_h2):
 
 def test_xml_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
-    populate_users(parse_file_xml(xml_path), connect_h2)
+    read_file(xml_path, connect_h2)
+    assert (1000 == count_rows(table, connect_h2))
+    clear_table(table, connect_h2)
+    assert (0 == count_rows(table, connect_h2))
+    connect_h2.rollback()
+
+
+def test_xlsx_ingest(connect_h2):
+    assert (0 == count_rows(table, connect_h2))
+    read_file(xlsx_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))

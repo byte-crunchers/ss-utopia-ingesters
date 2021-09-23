@@ -10999,4 +10999,61 @@
 		<is_admin>1</is_admin>
 		<active>1</active>
 	</ROW>
+
+	<ROW>
+		<id>3</id>
+		<username>amazedBuck7</username>
+		<email>vkirsten8411@xml.com</email>
+		<password>$2a$10$oKfNq0MWNdxT7pfyOtZy0eaNTLCDGJ4aBe9j.za1.WyepDkBJtDJ.</password>
+		<first_name>Kirsten</first_name>
+		<last_name>Vazquez</last_name>
+		<is_admin>0</is_admin>
+		<active>0</active>
+	</ROW>
+
+	<ROW>
+		<id>4</id>
+		<username>artisticSalt5</username>
+		<email>mjimmy2015@dickson.net</email>
+		<password>$2a$10$TxUxrfJWZzML4jNW8.bBKexjRwfX2vL.4piDlKqd7kyWCIDOOkUAK</password>
+		<first_name>Jimmy</first_name>
+		<last_name>Miller</last_name>
+		<is_admin>1</is_admin>
+		<active>1</active>
+	</ROW>
+
+	<ROW>
+		<id>5</id>
+		<username>boredChile1</username>
+		<email>guzmanscott4494@gmail.com</email>
+		<password>$2a$10$GLL.Ne78hYb91cYaZCh2ne7Swc7YREl3Pcb1OhPlvyr68Pigxdray</password>
+		<first_name>Scott</first_name>
+		<last_name>Guzman</last_name>
+		<is_admin>1</is_admin>
+		<active>0</active>
+	</ROW>
+
+	<ROW>
+		<id>6</id>
+		<username>yearningWidgeon9</username>
+		<email>mkayla2347@fowler.info</email>
+		<password>$2a$10$bCqku/xobpBnoAGGBPqU2./xAx5krrqllJ18FB3mJCfcz6x6QIf2i</password>
+		<first_name>Kayla</first_name>
+		<last_name>Mckenzie</last_name>
+		<is_admin>1</is_admin>
+		<active>1</active>
+	</ROW>
+
+	<ROW>
+		<id>7</id>
+		<username>somberCake5</username>
+		<email>t.gross602@conrad-patton.com</email>
+		<password>$2a$10$rHcq3HWzz9Hm1GKRvq7Z.OqymBEpQ0hSBxTXa8/Kn4hWcE4Wsd9Q6</password>
+		<first_name>Tony</first_name>
+		<last_name>Gross</last_name>
+		<is_admin>1</is_admin>
+		<active>1</active>
+	</ROW>
+
+
 </DATA>
