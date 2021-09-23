@@ -420,13 +420,12 @@
     <accounts_id>78</accounts_id>
     <card_num>4319237984759288</card_num>
     <pin>6075</pin>
-    <cvc1>657</cvc1>
     <cvc2>558</cvc2>
     <exp_date>2024-06-14</exp_date>
   </row>
   <row>
     <accounts_id>20</accounts_id>
-    <card_num>4319238054756287</card_num>
+    <card_num>a number</card_num>
     <pin></pin>
     <cvc1>469</cvc1>
     <cvc2>714</cvc2>

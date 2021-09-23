@@ -75,13 +75,12 @@
       "accounts_id": 51,
       "card_num": 4319231730084596,
       "pin": 9016,
-      "cvc1": 552,
       "cvc2": 535,
       "exp_date": "2022-10-12"
     },
     {
       "accounts_id": 44,
-      "card_num": 4319232187867475,
+      "card_num": "a number",
       "pin": "",
       "cvc1": 74,
       "cvc2": 821,
