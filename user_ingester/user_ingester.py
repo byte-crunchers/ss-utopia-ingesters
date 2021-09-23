@@ -120,6 +120,7 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
 
 
 def find_xlsx_bounds(ws: worksheet):
+    num_of_fields = 7
     row_num = 0
     for row in ws.iter_rows(min_row=1, max_row=20):
         row_num += 1  # yes this is an odd pattern, but it lets me use the iterator and report back the row number
@@ -129,11 +130,12 @@ def find_xlsx_bounds(ws: worksheet):
                     return (row_num + 1,
                             i + 2)  # row_num is already 1 indexed, but we want to add one because we hit id. For
                     # column we add one for 0-index and one to get from id to accounts_id
-                elif row[i].value == "accounts_id":
+                elif row[i].value == "username":
                     return row_num + 1, i + 1  # adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value is not None:  # if we hit data
                     try:
-                        if row[i + 8].value == '' or row[i + 8].value is None:  # if the 9th col is empty we assume
+                        # if the 9th col is empty we assume
+                        if row[i + num_of_fields].value == '' or row[i + num_of_fields].value is None:
                             # it doesn't have primary key
                             return row_num, i + 1  # adjust i for 0-index
                         else:

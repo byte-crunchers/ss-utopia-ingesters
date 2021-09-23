@@ -1,7 +1,7 @@
 import traceback
 
 import jaydebeapi
-from mysql.connector import Error
+from jaydebeapi import Error
 
 
 def clear_table(table, clear_conn):
@@ -12,9 +12,8 @@ def clear_table(table, clear_conn):
         clear_curs = clear_conn.cursor()
         for q in queries:
             clear_curs.execute(q)
-    except Error:
-        traceback.print_exc()
-        print("There was a problem clearing the user table!")
+    except Exception:
+        print("There was a problem clearing the table!")
 
 
 # This returns the count of all rows in the table
@@ -40,7 +39,8 @@ def execute_scripts_from_file(filename, conn):
         sql_file = fd.read()
         fd.close()
     except IOError:
-        traceback.print_exc()
+        print("Error opening sql file...\n")
+        return None
     # all sql commands (split on ';')
     sql_commands = sql_file.split(';')
     # Execute every command from the input file

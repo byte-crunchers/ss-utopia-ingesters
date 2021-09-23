@@ -6,7 +6,7 @@ import jaydebeapi
 from jaydebeapi import Error
 
 from database_helper import execute_scripts_from_file
-from user_ingester import populate_users, parse_file_csv, parse_file_json, parse_file_xml, parse_table_xlsx, read_file
+from user_ingester import read_file
 
 script_dir = os.path.dirname(__file__)
 

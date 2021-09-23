@@ -13,6 +13,9 @@ csv_path = os.path.join(script_dir, "../dummy_data/onethousand_users.csv")
 json_path = os.path.join(script_dir, "../dummy_data/onethousand_users.json")
 xml_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xml")
 xlsx_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xlsx")
+xlsx_no_pk = os.path.join(script_dir, "../dummy_data/onethousand_users_no_pk.xlsx")
+xlsx_shifted = os.path.join(script_dir, "../dummy_data/onethousand_users_shifted.xlsx")
+
 table = "users"
 
 
@@ -31,6 +34,16 @@ def connect_h2():
         print("There was a problem connecting to the database, please make sure the database information is correct!")
     else:
         return con_try
+
+
+def test_invalid_sql(connect_h2):
+    execute_scripts_from_file("test", connect_h2)
+
+
+# Test behavior on invalid file
+def test_invalid_file(connect_h2):
+    read_file("test", connect_h2)
+    read_file(1, connect_h2)
 
 
 # Test connection and create the schema
@@ -74,7 +87,16 @@ def test_xlsx_ingest(connect_h2):
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
+    read_file(xlsx_no_pk, connect_h2)
+    assert (1000 == count_rows(table, connect_h2))
+    clear_table(table, connect_h2)
+    assert (0 == count_rows(table, connect_h2))
+    read_file(xlsx_shifted, connect_h2)
     connect_h2.rollback()
+
+
+def test_bad_clear(connect_h2):
+    clear_table("test", connect_h2)
 
 
 if __name__ == '__main__':
