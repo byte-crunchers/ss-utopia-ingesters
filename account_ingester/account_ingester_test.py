@@ -40,6 +40,12 @@ def test_xlsx():
     assert ret[1].limit == None #checking account so no limit
     assert ret[0].limit == -1365
 
+def test_xlsx_shifted(): #when the actual data is not where we'd expect
+    ret = ai.parse_file_xlsx("dummy_data/accounts_shifted.xlsx")
+    assert ret[1]
+    assert ret[1].limit == None #checking account so no limit
+    assert ret[0].limit == -1365
+
 def test_csv():
     ret = ai.parse_file_csv("dummy_data/accounts.csv")
     assert ret[10]
