@@ -77,17 +77,9 @@ def find_xlsx_bounds(ws: worksheet):
         for i in range(0, 10):
             try:
                 if row[i].value == "id": #header and primary key
-                    return (row_num+1, i+2)# row_num is already 1 indexed, but we want to add one because we hit id. For column we add one for 0-index and one to get from id to cards_id
-                elif row[i].value == "cards_id":
-                    return (row_num+1, i+1)#adjust row_num for headers and i for 0-index
+                    return (row_num+1, i+1)# row_num is already 1 indexed, but we want to add one because we hit the header. For column we add one for 0-index and one to get from id to cards_id
                 elif row[i].value != '' and row[i].value != None: #if we hit data
-                    try:
-                        if row[i+8].value == '' or row[i+8].value == None: #if the 9th col is empty we assume it doesn't have primary key
-                            return(row_num, i+1) #adjust i for 0-index
-                        else:
-                            return(row_num, i+2) #adjust i for 0-index and primary key
-                    except: #means there's probably not anything there
-                            return(row_num, i+1) #adjust i for 0-index
+                    return(row_num, i+1) #adjust i for 0-index
             except:
                 pass #we don't care about an out of range here
     return None

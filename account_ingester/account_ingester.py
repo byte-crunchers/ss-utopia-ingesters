@@ -87,7 +87,7 @@ def find_xlsx_bounds(ws: worksheet):
             try:
                 if row[i].value == "id": #header and primary key
                     return (row_num+1, i+2)# row_num is already 1 indexed, but we want to add one because we hit id. For column we add one for 0-index and one to get from id to accounts_id
-                elif row[i].value == "accounts_id":
+                elif row[i].value == "users_id":
                     return (row_num+1, i+1)#adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value != None: #if we hit data
                     try:
