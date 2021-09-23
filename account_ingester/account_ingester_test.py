@@ -14,7 +14,7 @@ def connect_h2():
 
 
 def test_parse_json_dict():
-    accj = json.loads('{"users_id":1, "account_type":"Basic Credit", "balance":-420.00, "payment_due":44.26, "due_date":"2021-09-19", "limit":-1498, "debt_interest":0.089, "active":1 }')
+    accj = json.loads('{"users_id":1, "account_type":"Basic Credit", "balance":-420.00, "payment_due":44.26, "due_date":"2021-09-19", "credit_limit":-1498, "debt_interest":0.089, "active":1 }')
     acc : ai.Account = ai.parse_json_dict(accj)
     assert acc.limit == -1498
 

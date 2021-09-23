@@ -27,7 +27,7 @@ def parse_json_dict(json_dict: dict) -> Account:
     account.balance = json_dict["balance"]
     account.payment_due = json_dict["payment_due"]
     account.due_date = json_dict["due_date"]
-    account.limit = json_dict["limit"]
+    account.limit = json_dict["credit_limit"]
     account.interest = json_dict["debt_interest"]
     account.active = json_dict["active"]
     return account
@@ -162,7 +162,7 @@ def parse_file_xml(path: str) -> List:
                 account.balance = child.find('balance').text
                 account.payment_due = child.find('payment_due').text
                 account.due_date = child.find('due_date').text
-                account.limit = child.find('limit').text
+                account.limit = child.find('credit_limit').text
                 account.interest = child.find('debt_interest').text
                 account.active = child.find('active').text
                 ret_list.append(account)
