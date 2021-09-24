@@ -1,9 +1,8 @@
-#from account_ingester.account_ingester import Account
 import pytest
 import json
 import jaydebeapi
 import os
-import account_ingester.account_ingester as ai
+import transaction_ingester.transaction_ingester as ti
 
 @pytest.fixture(scope="module", autouse=True)
 def connect_h2():
@@ -14,73 +13,123 @@ def connect_h2():
 
 
 def test_parse_json_dict():
-    accj = json.loads('{"users_id":1, "account_type":"Basic Credit", "balance":-420.00, "payment_due":44.26, "due_date":"2021-09-19", "credit_limit":-1498, "debt_interest":0.089, "active":1 }')
-    acc : ai.Account = ai.parse_json_dict(accj)
-    assert acc.limit == -1498
+    transj = json.loads('{"id":1,"origin_account":85,"destination_account":89,"memo":"Religious interesting without majority.","transfer_value":1127.38,"time_stamp":"2021-09-23 10:44:51"}')
+    trans : ti.Transaction = ti.parse_json_dict(transj)
+    assert trans.destination == 89
 
 def test_parse_file_json_bad_path():
-    ret = ai.parse_file_json("dummy_data/nonexistant.json")
+    ret = ti.parse_file_json("dummy_data/nonexistant.json")
     assert ret == None
 
 def test_parse_file_json():
-    ret = ai.parse_file_json("dummy_data/accounts_array.json")
-    assert ret[1]
-    assert ret[1].limit == None #checking account so no limit
-    assert ret[0].limit == -1498
+    ret = ti.parse_file_json("dummy_data/transactions.json")
+    assert ret[10]
+    assert ret[0].destination == 89 
 
 def test_parse_file_xml():
-    ret = ai.parse_file_xml("dummy_data/accounts.xml")
-    assert ret[1]
-    assert ret[1].limit == None #checking account so no limit
-    assert float(ret[0].limit) == -1498
+    ret = ti.parse_file_xml("dummy_data/transactions.xml")
+    assert ret[10]
+    assert int(ret[0].destination) == 89
 
 def test_xlsx():
-    ret = ai.parse_file_xlsx("dummy_data/accounts.xlsx")
-    assert ret[1]
-    assert ret[1].limit == None #checking account so no limit
-    assert ret[0].limit == -1365
-
-def test_xlsx_shifted(): #when the actual data is not where we'd expect
-    ret = ai.parse_file_xlsx("dummy_data/accounts_shifted.xlsx")
-    assert ret[1]
-    assert ret[1].limit == None #checking account so no limit
-    assert ret[0].limit == -1365
+    ret = ti.parse_file_xlsx("dummy_data/transactions.xlsx")
+    assert ret[10]
+    assert ret[0].destination == 89
 
 def test_csv():
-    ret = ai.parse_file_csv("dummy_data/accounts.csv")
+    ret = ti.parse_file_csv("dummy_data/transactions.csv")
     assert ret[10]
-    assert ret[10].balance
+    assert int(ret[0].destination) == 89
 
-def test_write_accounts(connect_h2):
-    acc = ai.Account()
-    acc.user=1
-    acc.account_type="Basic Credit"
-    acc.active = 1
-    acc.balance = -420
-    acc.limit = -1498
-    acc.payment_due = 44.26
-    acc.due_date = "2021-09-19"
-    acc.interest = 0.089
-    accs = [acc]
+def test_write_transactions(connect_h2):
+    trans = ti.Transaction()
+    trans.origin=85
+    trans.destination=89
+    trans.memo="Religious interesting without majority."
+    trans.value=1127.38
+    trans.time_stamp="2021-09-23 10:44:51"
+    trans_list = [trans]
     curs = connect_h2.cursor()
-    curs.execute("SELECT * FROM accounts WHERE users_id = 1 AND balance = -420")
+    curs.execute("DELETE FROM transactions")
+    ti.write_transactions(trans_list, connect_h2)
+    curs.execute("SELECT * FROM transactions")
     ret = curs.fetchall()
-    assert len(ret) == 0 #Make sure it's not already in the DB
-    ai.write_accounts(accs, connect_h2)
-    curs.execute("SELECT * FROM accounts WHERE users_id = 1 AND balance = -420")
-    ret =  curs.fetchall()
     assert ret[0]
-    assert abs(ret[0][4] - 44.26) < 0.001 #fp compare on the payment
+    assert ret[0][2] == 89 #destination_account
     connect_h2.rollback()
 
 def test_read_file(connect_h2):
     curs = connect_h2.cursor()
-    curs.execute("DELETE FROM accounts")
-    ai.read_file("dummy_data/accounts.xlsx", connect_h2)
-    curs.execute("SELECT * FROM accounts")
+    curs.execute("DELETE FROM transactions")
+    ti.read_file("dummy_data/transactions.csv", connect_h2)
+    curs.execute("SELECT * FROM transactions")
     ret =  curs.fetchall()
-    assert ret[1] #asserts more than one was added
-    print (ret[0])
-    assert ret[0][3] #make sure there is a balance
+    assert ret[10] #asserts we have at least 10
+    assert ret[0][2] == 89 #checks destination account for number 1
+    connect_h2.rollback()
+    
+
+
+
+
+def test_parse_json_dict_cards():
+    transj = json.loads('{"merchant_account_id":80,"card_num":4,"memo":"Religious interesting without majority.","transfer_value":1127.38,"time_stamp":"2021-09-23 10:44:51", "cvc1":123, "pin":1234, "cvc2":123, "location":"TX"}')
+    trans : ti.Card_Transaction = ti.parse_json_dict_cards(transj)
+    assert trans.acc == 80
+
+def test_parse_file_json_bad_path_cards():
+    ret = ti.parse_file_json_cards("dummy_data/nonexistant.json")
+    assert ret == None
+
+def test_parse_file_json_cards():
+    ret = ti.parse_file_json_cards("dummy_data/card_transactions.json")
+    assert ret[10]
+    assert int(ret[0].acc) == 80
+
+def test_parse_file_xml_cards():
+    ret = ti.parse_file_xml_cards("dummy_data/card_transactions.xml")
+    assert ret[10]
+    assert int(ret[0].acc) == 80
+
+def test_xlsx_cards():
+    ret = ti.parse_file_xlsx_cards("dummy_data/card_transactions.xlsx")
+    assert ret[10]
+    assert int(ret[0].acc) == 80
+
+def test_csv_cards():
+    ret = ti.parse_file_csv_cards("dummy_data/card_transactions.csv")
+    assert ret[10]
+    assert int(ret[0].acc) == 80
+
+def test_write_transactions_cards(connect_h2):
+    trans = ti.Card_Transaction()
+    trans.acc = 80
+    trans.card=4319234901896186
+    trans.memo="Religious interesting without majority."
+    trans.value=1127.38
+    trans.cvc2 = 123
+    trans.time_stamp="2021-09-23 10:44:51"
+    trans_list = [trans]
+    curs = connect_h2.cursor()
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
+    curs.execute("DELETE FROM card_transactions")
+    ti.write_transactions_cards(trans_list, connect_h2)
+    curs.execute("SELECT * FROM card_transactions")
+    ret = curs.fetchall()
+    assert ret[0]
+    assert ret[0][2] == 80 #merchant_account
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
+    connect_h2.rollback()
+
+def test_read_file_cards(connect_h2):
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM card_transactions")
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
+    ti.read_file_cards("dummy_data/card_transactions.csv", connect_h2)
+    curs.execute("SELECT * FROM card_transactions")
+    ret =  curs.fetchall()
+    assert ret[10] #asserts we have at least 10
+    assert ret[0][2] == 80 #checks destination account for number 1
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
     connect_h2.rollback()
     

@@ -205,6 +205,7 @@ def write_transactions_cards(trans_list: List, conn: jaydebeapi.Connection) -> N
             cur.execute(query, vals)
         except:
             print("could not write transaction with values " + str(vals))
+            #traceback.print_exc()
 
 def parse_file_csv(path: str) -> List:
     with open(path, newline="") as acc_file:
@@ -215,11 +216,18 @@ def parse_file_csv(path: str) -> List:
             # Functionality for ingesting transactions
             try:
                 trans = Transaction()
-                trans.origin = row[0]
-                trans.destination = row[1]
-                trans.memo = row[2]
-                trans.value = row[3]
-                trans.time_stamp = row[4]
+                if(len(row) == 5): #has no id col
+                    trans.origin = row[0]
+                    trans.destination = row[1]
+                    trans.memo = row[2]
+                    trans.value = row[3] 
+                    trans.time_stamp = row[4]
+                else:
+                    trans.origin = row[1]
+                    trans.destination = row[2]
+                    trans.memo = row[3]
+                    trans.value = row[4] 
+                    trans.time_stamp = row[5]
                 ret_list.append(trans)
             except:
                 print("Could not add transaction on line " + str(row_count) + ": " + str(row))
@@ -235,15 +243,18 @@ def parse_file_csv_cards(path: str) -> List:
             # Functionality for ingesting transactions
             try:
                 trans = Card_Transaction()
-                trans.card = row[0]
-                trans.acc = row[1]
-                trans.memo = row[2]
-                trans.value = row[3]
-                trans.pin = check_null(row[4])
-                trans.cvc1 = check_null(row[5])
-                trans.cvc2 = check_null(row[6])
-                trans.location = row[7]
-                trans.time_stamp = row[8]
+                if(len(row) == 9): #has no id col
+                    i = 0
+                else: i = 1
+                trans.card = row[0+i]
+                trans.acc = row[1+i]
+                trans.memo = row[2+i]
+                trans.value = row[3+i]
+                trans.pin = check_null(row[4+i])
+                trans.cvc1 = check_null(row[5+i])
+                trans.cvc2 = check_null(row[6+i])
+                trans.location = row[7+i]
+                trans.time_stamp = row[8+i]
                 ret_list.append(trans)
             except:
                 print("Could not add transaction on line " + str(row_count) + ": " + str(row))
@@ -261,12 +272,12 @@ def parse_file_xml(path: str) -> List:
                 trans.origin = child.find('origin_account').text
                 trans.destination = child.find('destination_account').text
                 trans.memo = child.find('memo').text
-                trans.value = child.find('transaction_value').text
+                trans.value = child.find('transfer_value').text
                 trans.time_stamp = child.find('time_stamp').text
                 ret_list.append(trans)
             except:
                 print("Could not add transaction")
-                print("Skipping line...\n")
+                traceback.print_exc()
     except eTree.ParseError:
         traceback.print_exc()
     return ret_list
@@ -282,7 +293,7 @@ def parse_file_xml_cards(path: str) -> List:
                 trans.card = child.find('card_num').text
                 trans.acc = child.find('merchant_account_id').text
                 trans.memo = child.find('memo').text
-                trans.value = child.find('transaction_value').text
+                trans.value = child.find('transfer_value').text
                 trans.pin = check_null(child.find('pin').text)
                 trans.cvc1 = check_null(child.find('cvc1').text)
                 trans.cvc2 = check_null(child.find('cvc2').text)
@@ -291,7 +302,7 @@ def parse_file_xml_cards(path: str) -> List:
                 ret_list.append(trans)
             except:
                 print("Could not add transaction")
-                print("Skipping line...\n")
+                traceback.print_exc()
     except eTree.ParseError:
         traceback.print_exc()
     return ret_list
@@ -344,5 +355,6 @@ def read_file_cards(path, conn): #ENTRY POINT
 
 if __name__ == "__main__":
     conn =  connect_mysql("dbkey.json")
-    read_file_cards("dummy_data/card_transactions.xlsx", conn)
-    conn.commit()
+    parse_file_csv_cards("dummy_data/card_transactions.csv")
+    #read_file_cards("dummy_data/card_transactions.xlsx", conn)
+    conn.rollback()
