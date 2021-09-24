@@ -17,15 +17,19 @@ class Card:
             self.cvc2 = None
             self.exp = None
 
+def check_null(string: str) -> str:
+    if string == '\\N' or string == '':
+        return None
+    return string
 def parse_json_dict(json_dict: dict) -> Card:
 
     card = Card()
-    card.acc = json_dict["accounts_id"]
-    card.num = json_dict["card_num"]
-    card.pin = json_dict["pin"]
-    card.cvc1 = json_dict["cvc1"]
-    card.cvc2 = json_dict["cvc2"]
-    card.exp = json_dict["exp_date"]
+    card.acc = check_null(json_dict["accounts_id"])
+    card.num = check_null(json_dict["card_num"])
+    card.pin = check_null(json_dict["pin"])
+    card.cvc1 = check_null(json_dict["cvc1"])
+    card.cvc2 = check_null(json_dict["cvc2"])
+    card.exp = check_null(json_dict["exp_date"])
     return card
 
 def parse_file_json(path) -> List:
@@ -46,7 +50,7 @@ def parse_file_json(path) -> List:
 
 def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
     ret_list = []
-    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1]+7):
+    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1]+5):
         
         try: #test to see if we've reached the end of our data
             if row[0].value == None:
@@ -57,10 +61,32 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
             card = Card()
             card.acc = row[0].value
             card.num = row[1].value
-            if row[2].value == '\\N':
-                card.pin = None
-            else:
-                card.pin = row[2].value
+            card.pin = check_null(row[2].value)                
+            card.cvc1 = row[3].value
+            card.cvc2 = row[4].value
+            card.exp = row[5].value.date()
+            ret_list.append(card)
+        except Error as e:
+            print('Row failed to be parsed')
+            print (e)
+    return ret_list
+
+
+
+def parse_table_xlsx_card(ws: worksheet, bounds: tuple) -> List:
+    ret_list = []
+    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1]+8):
+        
+        try: #test to see if we've reached the end of our data
+            if row[0].value == None:
+                return ret_list
+        except:
+            return ret_list
+        try:
+            card = Card()
+            card.acc = row[0].value
+            card.num = row[1].value
+            card.pin = check_null(row[2].value)
             card.cvc1 = row[3].value
             card.cvc2 = row[4].value
             card.exp = row[5].value.date()
@@ -122,10 +148,7 @@ def parse_file_csv(path: str) -> List:
                 card = Card()
                 card.acc = row[0]
                 card.num = row[1]
-                if row[2] == '\\N':
-                    card.pin = None
-                else:
-                    card.pin = row[2]
+                card.pin = check_null(row[2])
                 card.cvc1 = row[3]
                 card.cvc2 = row[4]
                 card.exp = row[5]
