@@ -39,25 +39,24 @@ def connect_h2():
 
 def test_invalid_sql(connect_h2):
     execute_scripts_from_file("test", connect_h2)
-
+    connect_h2.rollback()
 
 # Test behavior on invalid file
 def test_invalid_file(connect_h2):
     read_file("test", connect_h2)
     read_file(1, connect_h2)
-
+    connect_h2.rollback()
 
 # Test connection and create the schema
 def test_create_schema(connect_h2):
     execute_scripts_from_file(schema_path, connect_h2)
     assert connect_h2
-
+    connect_h2.rollback()
 
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
     read_file(csv_path, connect_h2)
-
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
@@ -110,6 +109,7 @@ def test_xlsx_ingest(connect_h2):
 
 def test_bad_clear(connect_h2):
     clear_table("test", connect_h2)
+    connect_h2.rollback()
 
 
 if __name__ == '__main__':
