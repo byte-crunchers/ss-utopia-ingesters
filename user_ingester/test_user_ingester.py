@@ -102,9 +102,9 @@ def test_xlsx_ingest(connect_h2):
     norm_list = ui.parse_file_xlsx(xlsx_path)
     assert ("mildSwift2" == norm_list[0].user_name)
     nopk_list = ui.parse_file_xlsx(xlsx_no_pk)
-    assert (True == nopk_list[0].is_admin)
+    assert nopk_list[0].is_admin
     shifted_list = ui.parse_file_xlsx(xlsx_shifted)
-    assert (True == shifted_list[0].is_active)
+    assert shifted_list[0].is_active
     connect_h2.rollback()
 
 
