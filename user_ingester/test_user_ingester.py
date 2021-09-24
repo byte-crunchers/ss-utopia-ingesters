@@ -4,6 +4,7 @@ import jaydebeapi
 import pytest
 from jaydebeapi import Error
 
+import user_ingester as ui
 from database_helper import execute_scripts_from_file, count_rows, clear_table
 from user_ingester import read_file
 
@@ -56,6 +57,7 @@ def test_create_schema(connect_h2):
 def test_csv_ingest(connect_h2):
     assert (0 == count_rows(table, connect_h2))
     read_file(csv_path, connect_h2)
+
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
@@ -69,6 +71,8 @@ def test_json_ingest(connect_h2):
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
+    json_list = ui.parse_file_json(json_path)
+    assert ("Bradley" == json_list[1].l_name)
     connect_h2.rollback()
 
 
@@ -78,6 +82,8 @@ def test_xml_ingest(connect_h2):
     assert (1000 == count_rows(table, connect_h2))
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
+    xml_list = ui.parse_file_xml(xml_path)
+    assert ("mjimmy2015@dickson.net" == xml_list[1].email)
     connect_h2.rollback()
 
 
@@ -92,6 +98,13 @@ def test_xlsx_ingest(connect_h2):
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     read_file(xlsx_shifted, connect_h2)
+    assert (1000 == count_rows(table, connect_h2))
+    norm_list = ui.parse_file_xlsx(xlsx_path)
+    assert ("mildSwift2" == norm_list[0].user_name)
+    nopk_list = ui.parse_file_xlsx(xlsx_no_pk)
+    assert (True == nopk_list[0].is_admin)
+    shifted_list = ui.parse_file_xlsx(xlsx_shifted)
+    assert (True == shifted_list[0].is_active)
     connect_h2.rollback()
 
 

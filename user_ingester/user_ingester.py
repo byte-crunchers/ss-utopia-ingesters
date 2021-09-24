@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import traceback
 import xml.etree.ElementTree
 import xml.etree.ElementTree as eTree
@@ -10,6 +11,10 @@ import mysql
 from mysql.connector import Error
 from openpyxl import load_workbook
 from openpyxl import worksheet
+
+mysql_pass = os.environ.get("MYSQL_PASS")
+mysql_user = os.environ.get("MYSQL_USER")
+mysql_jar = os.environ.get("MYSQL_JAR")
 
 
 class User:
