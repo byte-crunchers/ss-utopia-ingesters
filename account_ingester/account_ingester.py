@@ -21,13 +21,14 @@ class Account:
             self.active = None
 
 def parse_json_dict(json_dict: dict) -> Account:
+
     account = Account()
     account.user = json_dict["users_id"]
     account.account_type = json_dict["account_type"]
     account.balance = json_dict["balance"]
     account.payment_due = json_dict["payment_due"]
     account.due_date = json_dict["due_date"]
-    account.limit = json_dict["limit"]
+    account.limit = json_dict["credit_limit"]
     account.interest = json_dict["debt_interest"]
     account.active = json_dict["active"]
     return account
@@ -42,7 +43,10 @@ def parse_file_json(path) -> List:
     json_list = json.load(f)
     return_list = []
     for json_dict in json_list:
-        return_list.append(parse_json_dict(json_dict))
+        try:
+            return_list.append(parse_json_dict(json_dict))
+        except:
+            print("Line failed to be parsed")
     return return_list
 
 def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
@@ -54,22 +58,25 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
                 return ret_list
         except:
             return ret_list
-        account = Account()
-        account.user = row[0].value
-        account.account_type = row[1].value
-        account.balance = row[2].value
-        account.payment_due = row[3].value
-        if row[4].value == '\\N':
-            account.due_date = None
-        else:
-            account.due_date = row[4].value
-        if row[5].value == '\\N':
-            account.limit = None
-        else:
-            account.limit = row[5].value
-        account.interest = row[6].value
-        account.active = row[7].value
-        ret_list.append(account)
+        try:
+            account = Account()
+            account.user = row[0].value
+            account.account_type = row[1].value
+            account.balance = row[2].value
+            account.payment_due = row[3].value
+            if row[4].value == '\\N':
+                account.due_date = None
+            else:
+                account.due_date = row[4].value
+            if row[5].value == '\\N':
+                account.limit = None
+            else:
+                account.limit = row[5].value
+            account.interest = row[6].value
+            account.active = row[7].value
+            ret_list.append(account)
+        except:
+            print('Row failed to be parsed')
     return ret_list
 
 def find_xlsx_bounds(ws: worksheet):
@@ -80,7 +87,7 @@ def find_xlsx_bounds(ws: worksheet):
             try:
                 if row[i].value == "id": #header and primary key
                     return (row_num+1, i+2)# row_num is already 1 indexed, but we want to add one because we hit id. For column we add one for 0-index and one to get from id to accounts_id
-                elif row[i].value == "accounts_id":
+                elif row[i].value == "users_id":
                     return (row_num+1, i+1)#adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value != None: #if we hit data
                     try:
@@ -162,7 +169,7 @@ def parse_file_xml(path: str) -> List:
                 account.balance = child.find('balance').text
                 account.payment_due = child.find('payment_due').text
                 account.due_date = child.find('due_date').text
-                account.limit = child.find('limit').text
+                account.limit = child.find('credit_limit').text
                 account.interest = child.find('debt_interest').text
                 account.active = child.find('active').text
                 ret_list.append(account)

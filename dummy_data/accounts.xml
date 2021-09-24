@@ -6,7 +6,7 @@
     <balance>-420</balance>
     <payment_due>44.26</payment_due>
     <due_date>2021-09-19</due_date>
-    <limit>-1498</limit>
+    <credit_limit>-1498</credit_limit>
     <debt_interest>0.089</debt_interest>
     <active>1</active>
   </row>
@@ -16,7 +16,7 @@
     <balance>69</balance>
     <payment_due>0</payment_due>
     <due_date/>
-    <limit/>
+    <credit_limit/>
     <debt_interest>0</debt_interest>
     <active>0</active>
   </row>
