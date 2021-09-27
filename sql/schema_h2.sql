@@ -84,7 +84,7 @@ DROP TABLE IF EXISTS "branches";
 
 CREATE TABLE "branches" (
   "id" int unsigned NOT NULL ,
-  "location" varchar(45) NOT NULL);
+  "location" varchar(256) NOT NULL);
 
 --
 -- Dumping data for table "branches"
@@ -268,6 +268,7 @@ ALTER TABLE appointments ADD FOREIGN KEY ("users_id_ap") REFERENCES "users" ("id
 ALTER TABLE branches MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE branches ADD PRIMARY KEY ("id");
 ALTER TABLE branches ADD UNIQUE KEY "branches_branches_id_UNIQUE" ("id");
+ALTER TABLE branches ADD UNIQUE KEY "branches_location_UNIQUE" ("location");
 ALTER TABLE card_transactions MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE card_transactions ADD PRIMARY KEY ("id");
 ALTER TABLE card_transactions ADD UNIQUE KEY "card_transactions_card_transactions_id_UNIQUE" ("id");
