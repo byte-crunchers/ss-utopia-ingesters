@@ -24,7 +24,7 @@ table = "users"
 def connect_h2():
     con_try = None
     try:
-        con_try = jaydebeapi.connect("org.h2.Driver", "jdbc:h2:file:~/test;MODE=MySQL;database_to_upper=false",
+        con_try = jaydebeapi.connect("org.h2.Driver", "jdbc:h2:tcp://localhost/~/test;MODE=MySQL;database_to_upper=false",
                                      ["sa", ""],
                                      os.environ.get('H2'))
         con_try.jconn.setAutoCommit(False)
@@ -55,6 +55,7 @@ def test_create_schema(connect_h2):
 
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
+    clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     read_file(csv_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
@@ -65,6 +66,7 @@ def test_csv_ingest(connect_h2):
 
 # Test parsing json file and adding to database
 def test_json_ingest(connect_h2):
+    clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     read_file(json_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
@@ -76,6 +78,7 @@ def test_json_ingest(connect_h2):
 
 
 def test_xml_ingest(connect_h2):
+    clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     read_file(xml_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))
@@ -87,6 +90,7 @@ def test_xml_ingest(connect_h2):
 
 
 def test_xlsx_ingest(connect_h2):
+    clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     read_file(xlsx_path, connect_h2)
     assert (1000 == count_rows(table, connect_h2))

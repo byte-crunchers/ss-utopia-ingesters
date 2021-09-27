@@ -13,18 +13,16 @@
 --
 -- Current Database: "bytecrunchers"
 --
-DROP SCHEMA IF EXISTS bytecrunchers CASCADE;
 
-CREATE SCHEMA bytecrunchers;
+
+CREATE SCHEMA IF NOT EXISTS bytecrunchers;
 
 SET SCHEMA bytecrunchers;
 --
 -- Table structure for table "account_types"
 --
 
-DROP TABLE IF EXISTS "account_types";
-
-CREATE TABLE "account_types" (
+CREATE TABLE IF NOT EXISTS "account_types" (
   "id" varchar(45) NOT NULL,
   "savings_interest" decimal(5,5) unsigned NOT NULL,
   "annual_fee" decimal(6,2) unsigned NOT NULL,
@@ -41,9 +39,8 @@ CREATE TABLE "account_types" (
 -- Table structure for table "accounts"
 --
 
-DROP TABLE IF EXISTS "accounts";
 
-CREATE TABLE "accounts" (
+CREATE TABLE IF NOT EXISTS "accounts" (
   "id" int unsigned NOT NULL ,
   "users_id" int unsigned NOT NULL,
   "account_type" varchar(45) NOT NULL,
@@ -63,9 +60,8 @@ CREATE TABLE "accounts" (
 -- Table structure for table "appointments"
 --
 
-DROP TABLE IF EXISTS "appointments";
 
-CREATE TABLE "appointments" (
+CREATE TABLE IF NOT EXISTS "appointments" (
   "users_id_ap" int unsigned NOT NULL,
   "branches_id" int unsigned NOT NULL,
   "start_time" datetime NOT NULL,
@@ -80,9 +76,8 @@ CREATE TABLE "appointments" (
 -- Table structure for table "branches"
 --
 
-DROP TABLE IF EXISTS "branches";
 
-CREATE TABLE "branches" (
+CREATE TABLE IF NOT EXISTS "branches" (
   "id" int unsigned NOT NULL ,
   "location" varchar(256) NOT NULL);
 
@@ -95,9 +90,8 @@ CREATE TABLE "branches" (
 -- Table structure for table "card_transactions"
 --
 
-DROP TABLE IF EXISTS "card_transactions";
 
-CREATE TABLE "card_transactions" (
+CREATE TABLE IF NOT EXISTS "card_transactions" (
   "id" int unsigned NOT NULL ,
   "card_num" bigint unsigned NOT NULL,
   "merchant_account_id" int unsigned NOT NULL,
@@ -118,9 +112,7 @@ CREATE TABLE "card_transactions" (
 -- Table structure for table "cards"
 --
 
-DROP TABLE IF EXISTS "cards";
-
-CREATE TABLE "cards" (
+CREATE TABLE IF NOT EXISTS "cards" (
   "accounts_id" int unsigned NOT NULL,
   "card_num" bigint unsigned NOT NULL,
   "pin" smallint unsigned DEFAULT NULL,
@@ -137,9 +129,7 @@ CREATE TABLE "cards" (
 -- Table structure for table "loan_payments"
 --
 
-DROP TABLE IF EXISTS "loan_payments";
-
-CREATE TABLE "loan_payments" (
+CREATE TABLE IF NOT EXISTS "loan_payments" (
   "id" int unsigned NOT NULL ,
   "loan_id" int unsigned NOT NULL,
   "account_id" int unsigned NOT NULL,
@@ -151,29 +141,12 @@ CREATE TABLE "loan_payments" (
 --
 
 
---
--- Table structure for table "loan_type"
---
-
-DROP TABLE IF EXISTS "loan_type";
-
-CREATE TABLE "loan_type" (
-  "id" varchar(45) NOT NULL,
-  "upper_range" decimal(4,4) NOT NULL,
-  "lower_range" decimal(4,4) NOT NULL);
-
---
--- Dumping data for table "loan_type"
---
-
 
 --
 -- Table structure for table "loan_types"
 --
 
-DROP TABLE IF EXISTS "loan_types";
-
-CREATE TABLE "loan_types" (
+CREATE TABLE IF NOT EXISTS "loan_types" (
   "id" varchar(45) NOT NULL,
   "upper_range" decimal(4,4) unsigned NOT NULL,
   "lower_range" decimal(4,4) unsigned NOT NULL,
@@ -188,9 +161,8 @@ CREATE TABLE "loan_types" (
 -- Table structure for table "loans"
 --
 
-DROP TABLE IF EXISTS "loans";
 
-CREATE TABLE "loans" (
+CREATE TABLE IF NOT EXISTS "loans" (
   "id" int unsigned NOT NULL ,
   "users_id" int unsigned NOT NULL,
   "balance" decimal(10,2) NOT NULL,
@@ -209,10 +181,7 @@ CREATE TABLE "loans" (
 --
 -- Table structure for table "transactions"
 --
-
-DROP TABLE IF EXISTS "transactions";
-
-CREATE TABLE "transactions" (
+CREATE TABLE IF NOT EXISTS "transactions" (
   "id" int unsigned NOT NULL ,
   "origin_account" int unsigned NOT NULL,
   "destination_account" int unsigned NOT NULL,
@@ -229,9 +198,8 @@ CREATE TABLE "transactions" (
 -- Table structure for table "users"
 --
 
-DROP TABLE IF EXISTS "users";
 
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
   "id" int unsigned NOT NULL ,
   "username" varchar(50) NOT NULL,
   "email" varchar(50) NOT NULL,
@@ -283,8 +251,6 @@ ALTER TABLE loan_payments ADD PRIMARY KEY ("id");
 ALTER TABLE loan_payments ADD UNIQUE KEY "loan_payments_loan_pay_ID_UNIQUE" ("id");
 ALTER TABLE loan_payments ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE loan_payments ADD FOREIGN KEY ("loan_id") REFERENCES "loans" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE loan_type ADD PRIMARY KEY ("id");
-ALTER TABLE loan_type ADD UNIQUE KEY "loan_type_id_UNIQUE" ("id");
 ALTER TABLE loan_types ADD PRIMARY KEY ("id");
 ALTER TABLE loan_types ADD UNIQUE KEY "loan_types_loan_type_id_UNIQUE" ("id");
 ALTER TABLE loans MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
