@@ -1,0 +1,16 @@
+{
+    "ticker": "INTC",
+    "name": "Intel",
+    "price": 54.44092287974263,
+    "marketCap": 135605198.60637605,
+    "volume": 60925000,
+    "PE": 39.75,
+    "dividendYield": 0,
+    "dividendRate": 0,
+    "yearHigh": 122.49,
+    "yearLow": 72.5,
+    "open": 111.19,
+    "high": 111.21,
+    "low": 109.03,
+    "timestamp": "2021-09-27 10:47:45.054793"
+}
