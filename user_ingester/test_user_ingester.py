@@ -24,7 +24,7 @@ table = "users"
 def connect_h2():
     con_try = None
     try:
-        con_try = jaydebeapi.connect("org.h2.Driver", "jdbc:h2:file:~/test;MODE=MySQL;database_to_upper=false",
+        con_try = jaydebeapi.connect("org.h2.Driver", "jdbc:h2:tcp://localhost/~/test;MODE=MySQL;database_to_upper=false",
                                      ["sa", ""],
                                      os.environ.get('H2'))
         con_try.jconn.setAutoCommit(False)
