@@ -189,9 +189,10 @@ DROP TABLE IF EXISTS `bytecrunchers`.`branches` ;
 
 CREATE TABLE IF NOT EXISTS `bytecrunchers`.`branches` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `location` VARCHAR(45) NOT NULL,
+  `location` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `branches_id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `branches_id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `branches_location_UNIQUE` (`location` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
