@@ -71,31 +71,6 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
             print (e)
     return ret_list
 
-
-
-def parse_table_xlsx_card(ws: worksheet, bounds: tuple) -> List:
-    ret_list = []
-    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1]+8):
-        
-        try: #test to see if we've reached the end of our data
-            if row[0].value == None:
-                return ret_list
-        except:
-            return ret_list
-        try:
-            card = Card()
-            card.acc = row[0].value
-            card.num = row[1].value
-            card.pin = check_null(row[2].value)
-            card.cvc1 = row[3].value
-            card.cvc2 = row[4].value
-            card.exp = row[5].value.date()
-            ret_list.append(card)
-        except Error as e:
-            print('Row failed to be parsed')
-            print (e)
-    return ret_list
-
 def find_xlsx_bounds(ws: worksheet):
     row_num = 0
     for row in ws.iter_rows(min_row=1, max_row=20):
