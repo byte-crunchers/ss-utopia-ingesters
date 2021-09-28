@@ -9,9 +9,6 @@ def upload_dir(subdir=''):
     stock_dir = './dummy_data/stock folder'
     for entry in os.scandir(stock_dir):
         s3.upload_file(entry.path, "data-datalake-1", 'stock/{}{}'.format(subdir, entry.name))
-        #print (entry.path)
-        #print (entry.name)
-        #print()
 
 if __name__ == "__main__":
     upload_dir('')
