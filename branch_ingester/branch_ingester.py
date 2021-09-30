@@ -51,10 +51,11 @@ def parse_file_csv(file):
                 branch_list.append(
                     Branch(int(row[0]), str(row[1])))
                 row_count += 1
-            except (ValueError, IndexError):
-                print("Could not add branch on line " + str(row_count) + ": " + str(row))
-                print("Skipping line...\n")
-                continue
+            except (ValueError, IndexError, Exception):
+                traceback.print_exc()
+                # print("Could not add branch on line " + str(row_count) + ": " + str(row))
+                # print("Skipping line...\n")
+                # continue
     return branch_list
 
 
