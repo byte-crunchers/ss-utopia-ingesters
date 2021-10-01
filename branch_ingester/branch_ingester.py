@@ -14,28 +14,32 @@ num_of_fields = 1
 
 
 class Branch:
-    def __init__(self, branch_id, location):
-        self.id = branch_id
-        self.location = location
+    def __init__(self, street_address, city, state, zip_code):
+        self.street_address = street_address
+        self.city = city
+        self.state = state
+        self.zip_code = zip_code
 
-    def to_string(self):
-        return self.location
+    def print_branch(self):
+        print(self.street_address, self.city, self.state, self.zip_code)
 
 
 def populate_branches(branch_data, ing_conn):
     curs = ing_conn.cursor()
-    query = "INSERT INTO branches(location) VALUES(?)"
-    for brnch in branch_data:
+    query = "INSERT INTO branches(street_address, city, state, zip) VALUES(?, ?, ?, ?) "
+    for branch in branch_data:
         try:
             # Checking if any of the incoming values are null or duplicate, if they are skip addition
-            if brnch.location and brnch.location.strip():
-                vals = [brnch.location]
+            if branch.street_address and branch.street_address.strip() and branch.city and branch.city.strip()\
+                    and branch.state and branch.state.strip() and branch.zip_code and branch.zip_code.strip():
+                vals = (branch.street_address, branch.city, branch.state, branch.zip_code)
                 curs.execute(query, vals)
             else:
                 raise Exception
             # Check for Duplicates and Nulls
         except (mysql.connector.errors.IntegrityError, jaydebeapi.DatabaseError, Exception):
-            print("Duplicate Location or Illegal Null: ", brnch.to_string())
+            print("Duplicate Location or Illegal Null: ")
+            branch.print_branch()
             print("Skipping addition..\n")
 
 
@@ -49,13 +53,13 @@ def parse_file_csv(file):
             # Functionality for ingesting branches
             try:
                 branch_list.append(
-                    Branch(int(row[0]), str(row[1])))
+                    Branch(str(row[1]), str(row[2]), str(row[3]), str(row[4]))
+                )
                 row_count += 1
             except (ValueError, IndexError, Exception):
-                traceback.print_exc()
-                # print("Could not add branch on line " + str(row_count) + ": " + str(row))
-                # print("Skipping line...\n")
-                # continue
+                print("Could not add branch on line " + str(row_count) + ": " + str(row))
+                print("Skipping line...\n")
+                continue
     return branch_list
 
 
@@ -168,4 +172,59 @@ def read_file(path, conn):
         print("Invalid file format")
         return
     populate_branches(acc, conn)
+
+
+def clear_table(table, clear_conn):
+    queries = []
+    h2_query = "DELETE FROM {};".format(table)
+    queries.append(h2_query)
+    try:
+        clear_curs = clear_conn.cursor()
+        for q in queries:
+            clear_curs.execute(q)
+    except Exception:
+        print("There was a problem clearing the table!")
+
+
+# This returns the count of all rows in the table
+def count_rows(table, count_conn):
+    count_curs = count_conn.cursor()
+    count_query = "select count(*) from {}".format(table)
+    row_count = None
+    try:
+        count_curs.execute(count_query)
+        row_count = count_curs.fetchall()[0][0]
+    except Error:
+        traceback.print_exc(
+            print("There was a problem counting the rows")
+        )
+    return row_count
+
+
+def execute_scripts_from_file(filename, conn):
+    # Open and read the file as a single buffer
+    sql_file = None
+    try:
+        fd = open(filename, 'r')
+        sql_file = fd.read()
+        fd.close()
+    except IOError:
+        print("Error opening sql file...\n")
+        return None
+    # all sql commands (split on ';')
+    sql_commands = sql_file.split(';')
+    # Execute every command from the input file
+    curs = conn.cursor()
+    for command in sql_commands:
+        # This will skip and report errors
+        # For example, if the tables do not yet exist, this will skip over
+        # the DROP TABLE commands
+        try:
+            curs.execute(command)
+        except (jaydebeapi.OperationalError, jaydebeapi.DatabaseError, Exception):
+            if command.isspace():
+                print("Skipping blank command in sql...\n")
+            else:
+                print("Could not execute command: ", command, "skipping command...\n")
+
 

@@ -4,8 +4,8 @@ import jaydebeapi
 import pytest
 
 import branch_ingester as bi
-from branch_ingester import read_file
-from database_helper import execute_scripts_from_file, count_rows, clear_table
+from branch_ingester import read_file, execute_scripts_from_file, count_rows, clear_table
+
 
 script_dir = os.path.dirname(__file__)
 schema_path = os.path.join(script_dir, "../sql/schema_h2.sql")
@@ -64,7 +64,7 @@ def test_csv_ingest(connect_h2):
     clear_table(table, connect_h2)
     assert (0 == count_rows(table, connect_h2))
     csv_list = bi.parse_file_csv(csv_path)
-    # assert ("3904 Cannon Ways,\r\nHawkinsfort, KS 66839" == csv_list[0].location)
+    assert ("3904 Cannon Ways,\r\nHawkinsfort, KS 66839" == csv_list[0].location)
     connect_h2.rollback()
 #
 #
@@ -109,6 +109,7 @@ def test_csv_ingest(connect_h2):
 #     clear_table(table, connect_h2)
 #     assert (0 == count_rows(table, connect_h2))
 #
+
 
 if __name__ == '__main__':
     pytest.main()
