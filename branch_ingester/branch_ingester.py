@@ -1,6 +1,5 @@
 import csv
 import json
-import os
 import traceback
 from typing import List
 import xml.etree.ElementTree
@@ -10,7 +9,8 @@ import mysql
 from mysql.connector import Error
 from openpyxl import load_workbook
 from openpyxl.worksheet import worksheet
-num_of_fields = 1
+num_of_fields = 3
+second_field = "street_address"
 
 
 class Branch:
@@ -31,7 +31,7 @@ def populate_branches(branch_data, ing_conn):
         try:
             # Checking if any of the incoming values are null or duplicate, if they are skip addition
             if branch.street_address and branch.street_address.strip() and branch.city and branch.city.strip()\
-                    and branch.state and branch.state.strip() and branch.zip_code and branch.zip_code.strip():
+                    and branch.state and branch.state.strip() and branch.zip_code:
                 vals = (branch.street_address, branch.city, branch.state, branch.zip_code)
                 curs.execute(query, vals)
             else:
@@ -71,7 +71,8 @@ def parse_file_xml(path):
         for child in root:
             try:
                 xml_branch_list.append(
-                    Branch(child.find('id').text, child.find('location').text))
+                    Branch(child.find('street_address').text, child.find('city').text, child.find('state').text, child.find('zip').text)
+                )
             except ValueError:
                 print("Could not add branch:" + child.find('id').text)
                 print("Skipping line...\n")
@@ -82,7 +83,7 @@ def parse_file_xml(path):
 
 def parse_json_dict(json_dict: dict) -> Branch:
     try:
-        json_branch = Branch(json_dict["id"], json_dict["location"])
+        json_branch = Branch(json_dict["street_address"], json_dict["city"], json_dict["state"], json_dict["zip"], )
         return json_branch
     except (ValueError, IndexError):
         print("Could not add branch: " + json_dict["id"], json_dict["location"])
@@ -110,7 +111,7 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
                 return ret_list
         except IndexError:
             return ret_list
-        branch = Branch(0, row[0].value)
+        branch = Branch(row[0].value, row[1].value, row[2].value, row[3].value)
         ret_list.append(branch)
     return ret_list
 
@@ -124,7 +125,7 @@ def find_xlsx_bounds(ws: worksheet):
                 if row[i].value == "id":  # header and primary key
                     return (row_num + 1,
                             i + 2)  # row_num is already 1 indexed, but we want to add one because we hit id. For
-                elif row[i].value == "location":
+                elif row[i].value == second_field:
                     return row_num + 1, i + 1  # adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value is not None:  # if we hit data
                     try:
@@ -145,7 +146,7 @@ def parse_file_xlsx(path: str) -> List:
     wb = load_workbook(filename=path, read_only=True)
     ws = None
     for sheet in wb:  # tries to find a sheet named accounts
-        if sheet.title.lower() == "accounts":
+        if sheet.title.lower() == "branches":
             ws = sheet
     if ws is None:
         ws = wb.active  # gets the first sheet
@@ -172,33 +173,6 @@ def read_file(path, conn):
         print("Invalid file format")
         return
     populate_branches(acc, conn)
-
-
-def clear_table(table, clear_conn):
-    queries = []
-    h2_query = "DELETE FROM {};".format(table)
-    queries.append(h2_query)
-    try:
-        clear_curs = clear_conn.cursor()
-        for q in queries:
-            clear_curs.execute(q)
-    except Exception:
-        print("There was a problem clearing the table!")
-
-
-# This returns the count of all rows in the table
-def count_rows(table, count_conn):
-    count_curs = count_conn.cursor()
-    count_query = "select count(*) from {}".format(table)
-    row_count = None
-    try:
-        count_curs.execute(count_query)
-        row_count = count_curs.fetchall()[0][0]
-    except Error:
-        traceback.print_exc(
-            print("There was a problem counting the rows")
-        )
-    return row_count
 
 
 def execute_scripts_from_file(filename, conn):
