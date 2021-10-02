@@ -1,6 +1,5 @@
 import csv
 import json
-import os
 import traceback
 from typing import List
 import xml.etree.ElementTree
@@ -10,32 +9,37 @@ import mysql
 from mysql.connector import Error
 from openpyxl import load_workbook
 from openpyxl.worksheet import worksheet
-num_of_fields = 1
+num_of_fields = 3
+second_field = "street_address"
 
 
 class Branch:
-    def __init__(self, branch_id, location):
-        self.id = branch_id
-        self.location = location
+    def __init__(self, street_address, city, state, zip_code):
+        self.street_address = street_address
+        self.city = city
+        self.state = state
+        self.zip_code = zip_code
 
-    def to_string(self):
-        return self.location
+    def print_branch(self):
+        print(self.street_address, self.city, self.state, self.zip_code)
 
 
 def populate_branches(branch_data, ing_conn):
     curs = ing_conn.cursor()
-    query = "INSERT INTO branches(location) VALUES(?)"
-    for brnch in branch_data:
+    query = "INSERT INTO branches(street_address, city, state, zip) VALUES(?, ?, ?, ?) "
+    for branch in branch_data:
         try:
             # Checking if any of the incoming values are null or duplicate, if they are skip addition
-            if brnch.location and brnch.location.strip():
-                vals = [brnch.location]
+            if branch.street_address and branch.street_address.strip() and branch.city and branch.city.strip()\
+                    and branch.state and branch.state.strip() and branch.zip_code:
+                vals = (branch.street_address, branch.city, branch.state, branch.zip_code)
                 curs.execute(query, vals)
             else:
                 raise Exception
             # Check for Duplicates and Nulls
         except (mysql.connector.errors.IntegrityError, jaydebeapi.DatabaseError, Exception):
-            print("Duplicate Location or Illegal Null: ", brnch.to_string())
+            print("Duplicate Location or Illegal Null: ")
+            branch.print_branch()
             print("Skipping addition..\n")
 
 
@@ -49,9 +53,10 @@ def parse_file_csv(file):
             # Functionality for ingesting branches
             try:
                 branch_list.append(
-                    Branch(int(row[0]), str(row[1])))
+                    Branch(str(row[1]), str(row[2]), str(row[3]), str(row[4]))
+                )
                 row_count += 1
-            except (ValueError, IndexError):
+            except (ValueError, IndexError, Exception):
                 print("Could not add branch on line " + str(row_count) + ": " + str(row))
                 print("Skipping line...\n")
                 continue
@@ -66,7 +71,8 @@ def parse_file_xml(path):
         for child in root:
             try:
                 xml_branch_list.append(
-                    Branch(child.find('id').text, child.find('location').text))
+                    Branch(child.find('street_address').text, child.find('city').text, child.find('state').text, child.find('zip').text)
+                )
             except ValueError:
                 print("Could not add branch:" + child.find('id').text)
                 print("Skipping line...\n")
@@ -77,7 +83,7 @@ def parse_file_xml(path):
 
 def parse_json_dict(json_dict: dict) -> Branch:
     try:
-        json_branch = Branch(json_dict["id"], json_dict["location"])
+        json_branch = Branch(json_dict["street_address"], json_dict["city"], json_dict["state"], json_dict["zip"], )
         return json_branch
     except (ValueError, IndexError):
         print("Could not add branch: " + json_dict["id"], json_dict["location"])
@@ -105,7 +111,7 @@ def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
                 return ret_list
         except IndexError:
             return ret_list
-        branch = Branch(0, row[0].value)
+        branch = Branch(row[0].value, row[1].value, row[2].value, row[3].value)
         ret_list.append(branch)
     return ret_list
 
@@ -119,7 +125,7 @@ def find_xlsx_bounds(ws: worksheet):
                 if row[i].value == "id":  # header and primary key
                     return (row_num + 1,
                             i + 2)  # row_num is already 1 indexed, but we want to add one because we hit id. For
-                elif row[i].value == "location":
+                elif row[i].value == second_field:
                     return row_num + 1, i + 1  # adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value is not None:  # if we hit data
                     try:
@@ -140,7 +146,7 @@ def parse_file_xlsx(path: str) -> List:
     wb = load_workbook(filename=path, read_only=True)
     ws = None
     for sheet in wb:  # tries to find a sheet named accounts
-        if sheet.title.lower() == "accounts":
+        if sheet.title.lower() == "branches":
             ws = sheet
     if ws is None:
         ws = wb.active  # gets the first sheet
@@ -167,4 +173,32 @@ def read_file(path, conn):
         print("Invalid file format")
         return
     populate_branches(acc, conn)
+
+
+def execute_scripts_from_file(filename, conn):
+    # Open and read the file as a single buffer
+    sql_file = None
+    try:
+        fd = open(filename, 'r')
+        sql_file = fd.read()
+        fd.close()
+    except IOError:
+        print("Error opening sql file...\n")
+        return None
+    # all sql commands (split on ';')
+    sql_commands = sql_file.split(';')
+    # Execute every command from the input file
+    curs = conn.cursor()
+    for command in sql_commands:
+        # This will skip and report errors
+        # For example, if the tables do not yet exist, this will skip over
+        # the DROP TABLE commands
+        try:
+            curs.execute(command)
+        except (jaydebeapi.OperationalError, jaydebeapi.DatabaseError, Exception):
+            if command.isspace():
+                print("Skipping blank command in sql...\n")
+            else:
+                print("Could not execute command: ", command, "skipping command...\n")
+
 

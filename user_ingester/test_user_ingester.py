@@ -24,7 +24,8 @@ table = "users"
 def connect_h2():
     con_try = None
     try:
-        con_try = jaydebeapi.connect("org.h2.Driver", "jdbc:h2:tcp://localhost/~/test;MODE=MySQL;database_to_upper=false",
+        con_try = jaydebeapi.connect("org.h2.Driver",
+                                     "jdbc:h2:tcp://localhost/~/test;MODE=MySQL;database_to_upper=false",
                                      ["sa", ""],
                                      os.environ.get('H2'))
         con_try.jconn.setAutoCommit(False)
@@ -41,17 +42,20 @@ def test_invalid_sql(connect_h2):
     execute_scripts_from_file("test", connect_h2)
     connect_h2.rollback()
 
+
 # Test behavior on invalid file
 def test_invalid_file(connect_h2):
     read_file("test", connect_h2)
-    read_file(1, connect_h2)
+    read_file(123, connect_h2)
     connect_h2.rollback()
+
 
 # Test connection and create the schema
 def test_create_schema(connect_h2):
     execute_scripts_from_file(schema_path, connect_h2)
     assert connect_h2
     connect_h2.rollback()
+
 
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):

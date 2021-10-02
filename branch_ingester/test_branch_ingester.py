@@ -3,9 +3,7 @@ import os
 import jaydebeapi
 import pytest
 
-import branch_ingester as bi
-from branch_ingester import read_file
-from database_helper import execute_scripts_from_file, count_rows, clear_table
+from branch_ingester import read_file, execute_scripts_from_file
 
 script_dir = os.path.dirname(__file__)
 schema_path = os.path.join(script_dir, "../sql/schema_h2.sql")
@@ -15,7 +13,6 @@ xml_path = os.path.join(script_dir, "../dummy_data/onethousand_branches.xml")
 xlsx_path = os.path.join(script_dir, "../dummy_data/onethousand_branches.xlsx")
 xlsx_shifted = os.path.join(script_dir, "../dummy_data/onethousand_branches_shifted.xlsx")
 xlsx_no_pk = os.path.join(script_dir, "../dummy_data/onethousand_branches_no_pk.xlsx")
-table = "branches"
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -57,57 +54,93 @@ def test_create_schema(connect_h2):
 
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     read_file(csv_path, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    csv_list = bi.parse_file_csv(csv_path)
-    #assert ("3904 Cannon Ways,\nHawkinsfort, KS 66839" == csv_list[0].location)
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("78625 Aaron Rapids\r\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
 # Test parsing json file and adding to database
 def test_json_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     read_file(json_path, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    json_list = bi.parse_file_json(json_path)
-    assert ("46132 Young Cape,\nWest Alexander, NJ 07206" == json_list[0].location)
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("304 Lewis Island\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
 def test_xml_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     read_file(xml_path, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    xml_list = bi.parse_file_xml(xml_path)
-    assert ("3218 Brady Divide,\nNicholston, MD 21610" == xml_list[0].location)
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("3598 Williams Mills\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
 def test_xlsx_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_path, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_no_pk, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_shifted, connect_h2)
-    assert (count_rows(table, connect_h2) > 500)
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
+    # Test reading normal xlsx
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    read_file(xlsx_path, connect_h2)  # Ingest branches
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("304 Lewis Island\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    # Test reading shifted xlsx
+    read_file(xlsx_shifted, connect_h2)  # Ingest branches
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("89360 Brent Circle\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    # Test reading xlsx with no primary key
+    read_file(xlsx_no_pk, connect_h2)  # Ingest branches
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM branches")
+    branches = curs.fetchall()
+    assert ("68645 Teresa Wells\n" == branches[0][1])
+    curs.execute("DELETE FROM branches")
+    curs.execute("SELECT COUNT(*) FROM branches")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    connect_h2.rollback()
 
 
 if __name__ == '__main__':

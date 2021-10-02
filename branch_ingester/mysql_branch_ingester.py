@@ -4,8 +4,8 @@ import traceback
 import jaydebeapi
 from jaydebeapi import Error
 
-from branch_ingester import read_file, parse_file_xlsx
-from database_helper import execute_scripts_from_file
+from branch_ingester import read_file, parse_file_xlsx, execute_scripts_from_file
+
 
 # Environment Variables
 mysql_pass = os.environ.get("MYSQL_PASS")
@@ -37,9 +37,9 @@ if __name__ == '__main__':
     sql_conn = connect()
     execute_scripts_from_file(schema_path, sql_conn)
     read_file(csv_path, sql_conn)
-    read_file(json_path, sql_conn)
-    read_file(xml_path, sql_conn)
-    read_file(xlsx_path, sql_conn)
-    branches = parse_file_xlsx(xlsx_path)
+    # read_file(json_path, sql_conn)
+    # read_file(xml_path, sql_conn)
+    # read_file(xlsx_path, sql_conn)
+    # branches = parse_file_xlsx(xlsx_path)
     sql_conn.commit()
     sql_conn.close()
