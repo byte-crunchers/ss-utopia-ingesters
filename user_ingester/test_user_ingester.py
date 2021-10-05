@@ -5,8 +5,6 @@ import pytest
 from jaydebeapi import Error
 
 import user_ingester as ui
-from database_helper import execute_scripts_from_file, count_rows, clear_table
-from user_ingester import read_file
 
 script_dir = os.path.dirname(__file__)
 schema_path = os.path.join(script_dir, "../sql/schema_h2.sql")
@@ -16,8 +14,6 @@ xml_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xml")
 xlsx_path = os.path.join(script_dir, "../dummy_data/onethousand_users.xlsx")
 xlsx_no_pk = os.path.join(script_dir, "../dummy_data/onethousand_users_no_pk.xlsx")
 xlsx_shifted = os.path.join(script_dir, "../dummy_data/onethousand_users_shifted.xlsx")
-
-table = "users"
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -30,7 +26,7 @@ def connect_h2():
                                      os.environ.get('H2'))
         con_try.jconn.setAutoCommit(False)
         con_try.cursor().execute("set schema bytecrunchers")
-    except Error:
+    except jaydebeapi.Error:
         print("There was a problem connecting to the database, please make sure the database information is correct!")
     if not isinstance(con_try, jaydebeapi.Connection):
         print("There was a problem connecting to the database, please make sure the database information is correct!")
@@ -39,84 +35,122 @@ def connect_h2():
 
 
 def test_invalid_sql(connect_h2):
-    execute_scripts_from_file("test", connect_h2)
+    ui.execute_scripts_from_file("test", connect_h2)
     connect_h2.rollback()
 
 
 # Test behavior on invalid file
 def test_invalid_file(connect_h2):
-    read_file("test", connect_h2)
-    read_file(123, connect_h2)
+    ui.read_file("test", connect_h2)
+    ui.read_file(1, connect_h2)
     connect_h2.rollback()
 
 
 # Test connection and create the schema
 def test_create_schema(connect_h2):
-    execute_scripts_from_file(schema_path, connect_h2)
+    ui.execute_scripts_from_file(schema_path, connect_h2)
     assert connect_h2
     connect_h2.rollback()
 
 
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(csv_path, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(csv_path, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("anxiousLemur1" == users[0][1])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
 # Test parsing json file and adding to database
 def test_json_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(json_path, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    json_list = ui.parse_file_json(json_path)
-    assert ("Bradley" == json_list[1].l_name)
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(json_path, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("hryan5029@yahoo.com" == users[0][2])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
+# Test parsing json file and adding to database
 def test_xml_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xml_path, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    xml_list = ui.parse_file_xml(xml_path)
-    assert ("mjimmy2015@dickson.net" == xml_list[1].email)
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(xml_path, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("$2a$10$0vVuJyiuo1OVZV/NRq2DxOZZBFdKWjJuavJDG6cRIQVffKEaE7zdO" == users[0][3])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 
+# Test parsing json file and adding to database
 def test_xlsx_ingest(connect_h2):
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_path, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_no_pk, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    clear_table(table, connect_h2)
-    assert (0 == count_rows(table, connect_h2))
-    read_file(xlsx_shifted, connect_h2)
-    assert (1000 == count_rows(table, connect_h2))
-    norm_list = ui.parse_file_xlsx(xlsx_path)
-    assert ("mildSwift2" == norm_list[0].user_name)
-    nopk_list = ui.parse_file_xlsx(xlsx_no_pk)
-    assert nopk_list[0].is_admin
-    shifted_list = ui.parse_file_xlsx(xlsx_shifted)
-    assert shifted_list[0].is_active
-    connect_h2.rollback()
-
-
-def test_bad_clear(connect_h2):
-    clear_table("test", connect_h2)
+    # Test Normal XLSX
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(xlsx_path, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("Jennifer" == users[0][4])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    # Test Shifted XLSX
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(xlsx_shifted, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("Martin" == users[0][5])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    # Test No Pk XLSX
+    curs = connect_h2.cursor()
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    ui.read_file(xlsx_no_pk, connect_h2)
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (1000 == curs.fetchmany(size=1)[0][0])  # Test that there are now 1000 users
+    curs.execute("SELECT * FROM users")
+    users = curs.fetchall()
+    assert ("Chapman" == users[0][5])
+    curs.execute("DELETE FROM users")
+    curs.execute("SELECT COUNT(*) FROM users")
+    assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
     connect_h2.rollback()
 
 

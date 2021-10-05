@@ -6,45 +6,62 @@ import xml.etree.ElementTree as eTree
 from typing import List
 
 import jaydebeapi
-import mysql
-from mysql.connector import Error
 from openpyxl import load_workbook
 from openpyxl import worksheet
 
 
 class User:
-    def __init__(self, user_name, email, password, f_name, l_name, is_admin, is_active):
-        self.user_name = user_name
+    def __init__(self, user, email, password, f_name, l_name, is_admin, ssn, active, confirmed, phone,
+                 dob, street_address, city, state, zip_code):
+        self.user = user
         self.email = email
         self.password = password
         self.f_name = f_name
         self.l_name = l_name
         self.is_admin = is_admin
-        self.is_active = is_active
+        self.ssn = ssn
+        self.active = active
+        self.confirmed = confirmed
+        self.phone = phone
+        self.dob = dob
+        self.street_address = street_address
+        self.city = city
+        self.state = state
+        self.zip_code = zip_code
 
-    def to_string(self):
-        return self.user_name, self.email, self.password, self.f_name, self.l_name, str(
-            self.is_admin), str(self.is_active)
+    def print_user(self):
+        try:
+            print(
+                str(self.user) + ", " + str(self.email) + ", " + str(self.password) + ", " + self.f_name + ", "
+                + self.l_name + ", " + str(self.is_admin) + ", " + str(self.ssn) + ", " + str(self.active) + ", "
+                + str(self.confirmed) + ", " + str(self.phone) + ", " + str(self.dob) + ", " + str(self.street_address)
+                + ", " + str(self.city) + ", " + str(self.state) + ", " + str(self.zip_code))
+        except TypeError:
+            print("Illegal Null Found")
 
 
 def populate_users(user_data, ing_conn):
+    row_count = 0
     curs = ing_conn.cursor()
-    query = "INSERT INTO users(username, email, password, first_name, last_name, is_admin, active) VALUES(?,?,?,?,?," \
-            "?,?) "
+    dd_count = 0
+    curs = ing_conn.cursor()
+    query = "INSERT INTO users(username, email, password, first_name, last_name, is_admin, ssn, active, " \
+            "confirmed, phone, dob, street_address, city, state, zip) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " \
+            "?, ?, ?) "
     for usr in user_data:
+        row_count += 1
         try:
-            # Checking if any of the incoming values are null or duplicate, if they are skip addition
-            if usr.user_name and usr.user_name.strip() and usr.email and usr.email.strip() and usr.password \
-                    and usr.password.strip() and usr.f_name and usr.f_name.strip() and usr.l_name and \
-                    usr.l_name.strip() and str(usr.is_admin) and str(usr.is_admin).strip() and \
-                    str(usr.is_active) and str(usr.is_active).strip():
-                vals = (usr.user_name, usr.email, usr.password, usr.f_name, usr.l_name, usr.is_admin, usr.is_active)
+            if usr.user.strip() and usr.email.strip() and usr.password.strip() and usr.f_name.strip:
+                vals = (usr.user, usr.email, usr.password, usr.f_name, usr.l_name, usr.is_admin, usr.ssn,
+                        usr.active, usr.confirmed, usr.phone, usr.dob, usr.street_address, usr.city,
+                        usr.state, usr.zip_code)
                 curs.execute(query, vals)
             else:
                 raise Exception
             # Check for Duplicates and Nulls
-        except (mysql.connector.errors.IntegrityError, jaydebeapi.DatabaseError, Exception):
-            print("Duplicate User or Illegal Null: ", usr.to_string())
+        except (jaydebeapi.DatabaseError, Exception):
+            print("Duplicate User or Illegal Null on row " + str(row_count) + ":")
+            usr.print_user()
             print("Skipping addition..\n")
 
 
@@ -58,8 +75,10 @@ def parse_file_csv(file):
             # Functionality for ingesting users
             try:
                 user_list.append(
-                    User(str(row[1]), str(row[2]), str(row[3]), str(row[4]), str(row[5]),
-                         str(row[6]), str(row[7])))
+                    User(str(row[1]), str(row[2]), str(row[3]), str(row[4]), str(row[5]), bool(row[6]),
+                         str(int(row[7])), bool(row[8]), bool(row[9]), str(int(row[10])), str(row[11]), str(row[12]),
+                         str(row[13]), str(row[14]), str(row[15]))
+                )
                 row_count += 1
             except (ValueError, IndexError):
                 print("Could not add user on line " + str(row_count) + ": " + str(row))
@@ -70,7 +89,9 @@ def parse_file_csv(file):
 
 def parse_json_dict(json_dict: dict) -> User:
     json_user = User(json_dict["username"], json_dict["email"], json_dict["password"],
-                     json_dict["first_name"], json_dict["last_name"], json_dict["is_admin"], json_dict["active"])
+                     json_dict["first_name"], json_dict["last_name"], json_dict["is_admin"], json_dict["ssn"],
+                     json_dict["active"], json_dict["confirmed"], json_dict["phone"], json_dict["dob"],
+                     json_dict["street_address"], json_dict["city"], json_dict["state"], json_dict["zip"])
     return json_user
 
 
@@ -97,7 +118,12 @@ def parse_file_xml(path):
                 xml_user_list.append(
                     User(child.find('username').text, child.find('email').text,
                          child.find('password').text, child.find('first_name').text, child.find('last_name').text,
-                         child.find('is_admin').text, child.find('active').text))
+                         child.find('is_admin').text, child.find('ssn').text, child.find('active').text,
+                         child.find('confirmed').text, child.find('phone').text, child.find('dob').text,
+                         child.find('street_address').text, child.find('city').text, child.find('state').text,
+                         child.find('zip').text)
+                )
+
             except ValueError:
                 print("Could not add user:" + child.find('id').text)
                 print("Skipping line...\n")
@@ -108,19 +134,25 @@ def parse_file_xml(path):
 
 def parse_table_xlsx(ws: worksheet, bounds: tuple) -> List:
     ret_list = []
-    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1] + 7):
+    for row in ws.iter_rows(min_row=bounds[0], min_col=bounds[1], max_col=bounds[1] + 14):
         try:  # test to see if we've reached the end of our data
             if row[0].value is None:
                 return ret_list
         except IndexError:
             return ret_list
-        user = User(row[0].value, row[1].value, row[2].value, row[3].value, row[4].value, row[5].value, row[6].value)
+        date = row[10].value
+        if date:
+            date = date.date()
+        user = User(row[0].value, row[1].value, row[2].value, row[3].value, row[4].value, row[5].value, row[6].value,
+                    row[7].value, row[8].value, row[9].value, str(date), row[11].value, row[12].value,
+                    row[13].value, row[14].value)
         ret_list.append(user)
     return ret_list
 
 
 def find_xlsx_bounds(ws: worksheet):
-    num_of_fields = 7
+    num_of_fields = 13
+    second_field = "username"
     row_num = 0
     for row in ws.iter_rows(min_row=1, max_row=20):
         row_num += 1  # yes this is an odd pattern, but it lets me use the iterator and report back the row number
@@ -130,7 +162,7 @@ def find_xlsx_bounds(ws: worksheet):
                     return (row_num + 1,
                             i + 2)  # row_num is already 1 indexed, but we want to add one because we hit id. For
                     # column we add one for 0-index and one to get from id to accounts_id
-                elif row[i].value == "username":
+                elif row[i].value == second_field:
                     return row_num + 1, i + 1  # adjust row_num for headers and i for 0-index
                 elif row[i].value != '' and row[i].value is not None:  # if we hit data
                     try:
@@ -151,7 +183,7 @@ def parse_file_xlsx(path: str) -> List:
     wb = load_workbook(filename=path, read_only=True)
     ws = None
     for sheet in wb:  # tries to find a sheet named accounts
-        if sheet.title.lower() == "accounts":
+        if sheet.title.lower() == "users":
             ws = sheet
     if ws is None:
         ws = wb.active  # gets the first sheet
@@ -178,3 +210,30 @@ def read_file(path, conn):
         print("Invalid file format")
         return
     populate_users(acc, conn)
+
+
+def execute_scripts_from_file(filename, conn):
+    # Open and read the file as a single buffer
+    sql_file = None
+    try:
+        fd = open(filename, 'r')
+        sql_file = fd.read()
+        fd.close()
+    except IOError:
+        print("Error opening sql file...\n")
+        return None
+    # all sql commands (split on ';')
+    sql_commands = sql_file.split(';')
+    # Execute every command from the input file
+    curs = conn.cursor()
+    for command in sql_commands:
+        # This will skip and report errors
+        # For example, if the tables do not yet exist, this will skip over
+        # the DROP TABLE commands
+        try:
+            curs.execute(command)
+        except (jaydebeapi.OperationalError, jaydebeapi.DatabaseError, Exception):
+            if command.isspace():
+                print("Skipping blank command in sql...\n")
+            else:
+                print("Could not execute command: ", command, "skipping command...\n")
