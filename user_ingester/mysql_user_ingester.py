@@ -4,8 +4,7 @@ import traceback
 import jaydebeapi
 from jaydebeapi import Error
 
-from database_helper import execute_scripts_from_file
-from user_ingester import read_file
+import user_ingester as ui
 
 # Environment Variables
 mysql_pass = os.environ.get("MYSQL_PASS")
@@ -33,13 +32,12 @@ def connect():
     return con_try
 
 
-
 if __name__ == '__main__':
     sql_conn = connect()
-    execute_scripts_from_file(schema_path, sql_conn)
-    read_file(csv_path, sql_conn)
-    read_file(json_path, sql_conn)
-    read_file(xml_path, sql_conn)
-    read_file(xlsx_path, sql_conn)
+    ui.execute_scripts_from_file(schema_path, sql_conn)
+    # ui.read_file(csv_path, sql_conn)
+    # ui.read_file(json_path, sql_conn)
+    # ui.read_file(xml_path, sql_conn)
+    ui.read_file(xlsx_path, sql_conn)
     sql_conn.commit()
     sql_conn.close()
