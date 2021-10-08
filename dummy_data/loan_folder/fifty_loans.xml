@@ -1,0 +1,702 @@
+<DATA>
+
+	<ROW>
+		<id>1</id>
+		<users_id>47</users_id>
+		<balance>-344266.42</balance>
+		<interest_rate>0.03158</interest_rate>
+		<due_date>2021-10-16 00:00:00</due_date>
+		<payment_due>6232.37</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>5436.67</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>2</id>
+		<users_id>54</users_id>
+		<balance>-179408.47</balance>
+		<interest_rate>0.04689</interest_rate>
+		<due_date>2021-11-06 00:00:00</due_date>
+		<payment_due>4560.52</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>4206.56</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>3</id>
+		<users_id>3</users_id>
+		<balance>-374617.00</balance>
+		<interest_rate>0.07651</interest_rate>
+		<due_date>2021-10-14 00:00:00</due_date>
+		<payment_due>15569.10</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>14331.03</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>4</id>
+		<users_id>36</users_id>
+		<balance>-24221.06</balance>
+		<interest_rate>0.04866</interest_rate>
+		<due_date>2021-10-31 00:00:00</due_date>
+		<payment_due>638.13</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>589.34</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>5</id>
+		<users_id>35</users_id>
+		<balance>-68452.61</balance>
+		<interest_rate>0.05272</interest_rate>
+		<due_date>2021-10-26 00:00:00</due_date>
+		<payment_due>2104.90</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>1804.53</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>6</id>
+		<users_id>51</users_id>
+		<balance>-24558.09</balance>
+		<interest_rate>0.05095</interest_rate>
+		<due_date>2021-10-25 00:00:00</due_date>
+		<payment_due>723.80</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>625.68</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>7</id>
+		<users_id>29</users_id>
+		<balance>-391939.79</balance>
+		<interest_rate>0.05555</interest_rate>
+		<due_date>2021-11-05 00:00:00</due_date>
+		<payment_due>12000.18</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>10885.67</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>8</id>
+		<users_id>34</users_id>
+		<balance>-275964.35</balance>
+		<interest_rate>0.05335</interest_rate>
+		<due_date>2021-10-23 00:00:00</due_date>
+		<payment_due>8161.60</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>7361.58</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>9</id>
+		<users_id>7</users_id>
+		<balance>-116814.88</balance>
+		<interest_rate>0.04511</interest_rate>
+		<due_date>2021-10-12 00:00:00</due_date>
+		<payment_due>3060.92</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>2634.56</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>10</id>
+		<users_id>1</users_id>
+		<balance>-33897.02</balance>
+		<interest_rate>0.04322</interest_rate>
+		<due_date>2021-10-16 00:00:00</due_date>
+		<payment_due>755.79</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>732.50</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>11</id>
+		<users_id>17</users_id>
+		<balance>-37579.43</balance>
+		<interest_rate>0.07197</interest_rate>
+		<due_date>2021-10-20 00:00:00</due_date>
+		<payment_due>1433.60</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>1352.26</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>12</id>
+		<users_id>26</users_id>
+		<balance>-150813.51</balance>
+		<interest_rate>0.07767</interest_rate>
+		<due_date>2021-10-12 00:00:00</due_date>
+		<payment_due>6801.83</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>5856.70</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>13</id>
+		<users_id>37</users_id>
+		<balance>-252552.42</balance>
+		<interest_rate>0.06776</interest_rate>
+		<due_date>2021-10-19 00:00:00</due_date>
+		<payment_due>9709.94</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>8556.89</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>14</id>
+		<users_id>9</users_id>
+		<balance>-206727.46</balance>
+		<interest_rate>0.03486</interest_rate>
+		<due_date>2021-10-23 00:00:00</due_date>
+		<payment_due>3824.40</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>3603.73</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>15</id>
+		<users_id>36</users_id>
+		<balance>-220015.35</balance>
+		<interest_rate>0.07989</interest_rate>
+		<due_date>2021-10-30 00:00:00</due_date>
+		<payment_due>9544.90</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>8788.39</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>16</id>
+		<users_id>54</users_id>
+		<balance>-68349.10</balance>
+		<interest_rate>0.05493</interest_rate>
+		<due_date>2021-10-15 00:00:00</due_date>
+		<payment_due>2003.60</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>1877.31</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>17</id>
+		<users_id>17</users_id>
+		<balance>-327877.70</balance>
+		<interest_rate>0.05012</interest_rate>
+		<due_date>2021-10-17 00:00:00</due_date>
+		<payment_due>9223.35</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>8217.13</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>18</id>
+		<users_id>3</users_id>
+		<balance>-70401.81</balance>
+		<interest_rate>0.03113</interest_rate>
+		<due_date>2021-10-24 00:00:00</due_date>
+		<payment_due>1281.31</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>1095.92</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>19</id>
+		<users_id>11</users_id>
+		<balance>-351080.14</balance>
+		<interest_rate>0.05405</interest_rate>
+		<due_date>2021-10-19 00:00:00</due_date>
+		<payment_due>10791.53</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>9488.13</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>20</id>
+		<users_id>43</users_id>
+		<balance>-249604.18</balance>
+		<interest_rate>0.04944</interest_rate>
+		<due_date>2021-10-28 00:00:00</due_date>
+		<payment_due>7303.23</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>6169.74</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>21</id>
+		<users_id>59</users_id>
+		<balance>-24043.63</balance>
+		<interest_rate>0.06713</interest_rate>
+		<due_date>2021-10-15 00:00:00</due_date>
+		<payment_due>949.96</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>807.06</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>22</id>
+		<users_id>48</users_id>
+		<balance>-343415.48</balance>
+		<interest_rate>0.05079</interest_rate>
+		<due_date>2021-11-01 00:00:00</due_date>
+		<payment_due>9914.78</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>8721.15</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>23</id>
+		<users_id>36</users_id>
+		<balance>-78873.87</balance>
+		<interest_rate>0.03257</interest_rate>
+		<due_date>2021-10-11 00:00:00</due_date>
+		<payment_due>1307.03</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>1284.29</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>24</id>
+		<users_id>21</users_id>
+		<balance>-366694.12</balance>
+		<interest_rate>0.05951</interest_rate>
+		<due_date>2021-10-27 00:00:00</due_date>
+		<payment_due>12022.62</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>10910.41</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>25</id>
+		<users_id>12</users_id>
+		<balance>-189149.34</balance>
+		<interest_rate>0.03239</interest_rate>
+		<due_date>2021-10-08 00:00:00</due_date>
+		<payment_due>3629.85</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>3062.95</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>26</id>
+		<users_id>56</users_id>
+		<balance>-10910.08</balance>
+		<interest_rate>0.06452</interest_rate>
+		<due_date>2021-10-25 00:00:00</due_date>
+		<payment_due>400.39</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>351.94</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>27</id>
+		<users_id>30</users_id>
+		<balance>-109969.54</balance>
+		<interest_rate>0.05139</interest_rate>
+		<due_date>2021-10-14 00:00:00</due_date>
+		<payment_due>2972.35</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>2825.87</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>28</id>
+		<users_id>49</users_id>
+		<balance>-202955.23</balance>
+		<interest_rate>0.04438</interest_rate>
+		<due_date>2021-10-20 00:00:00</due_date>
+		<payment_due>4512.99</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>4503.32</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>29</id>
+		<users_id>57</users_id>
+		<balance>-242828.43</balance>
+		<interest_rate>0.06693</interest_rate>
+		<due_date>2021-10-18 00:00:00</due_date>
+		<payment_due>9620.94</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>8125.91</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>30</id>
+		<users_id>31</users_id>
+		<balance>-197336.48</balance>
+		<interest_rate>0.04963</interest_rate>
+		<due_date>2021-10-20 00:00:00</due_date>
+		<payment_due>5209.65</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>4896.58</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>31</id>
+		<users_id>47</users_id>
+		<balance>-330277.31</balance>
+		<interest_rate>0.03965</interest_rate>
+		<due_date>2021-10-26 00:00:00</due_date>
+		<payment_due>7767.70</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>6548.29</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>32</id>
+		<users_id>13</users_id>
+		<balance>-259810.50</balance>
+		<interest_rate>0.07570</interest_rate>
+		<due_date>2021-10-18 00:00:00</due_date>
+		<payment_due>9929.90</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>9834.46</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>33</id>
+		<users_id>29</users_id>
+		<balance>-37655.02</balance>
+		<interest_rate>0.06758</interest_rate>
+		<due_date>2021-10-21 00:00:00</due_date>
+		<payment_due>1487.19</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>1272.37</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>34</id>
+		<users_id>36</users_id>
+		<balance>-172746.78</balance>
+		<interest_rate>0.03928</interest_rate>
+		<due_date>2021-11-02 00:00:00</due_date>
+		<payment_due>3965.04</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>3393.11</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>35</id>
+		<users_id>8</users_id>
+		<balance>-156498.39</balance>
+		<interest_rate>0.03459</interest_rate>
+		<due_date>2021-10-18 00:00:00</due_date>
+		<payment_due>2724.19</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>2706.50</monthly_payment>
+		<active>0</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>36</id>
+		<users_id>58</users_id>
+		<balance>-105995.46</balance>
+		<interest_rate>0.05480</interest_rate>
+		<due_date>2021-11-01 00:00:00</due_date>
+		<payment_due>3237.24</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>2904.03</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>37</id>
+		<users_id>43</users_id>
+		<balance>-393975.00</balance>
+		<interest_rate>0.06156</interest_rate>
+		<due_date>2021-10-27 00:00:00</due_date>
+		<payment_due>12143.15</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>12126.78</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>38</id>
+		<users_id>60</users_id>
+		<balance>-21977.43</balance>
+		<interest_rate>0.07297</interest_rate>
+		<due_date>2021-10-10 00:00:00</due_date>
+		<payment_due>933.85</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>801.81</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>39</id>
+		<users_id>35</users_id>
+		<balance>-17581.30</balance>
+		<interest_rate>0.07939</interest_rate>
+		<due_date>2021-10-24 00:00:00</due_date>
+		<payment_due>700.81</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>697.86</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>40</id>
+		<users_id>57</users_id>
+		<balance>-236272.07</balance>
+		<interest_rate>0.03006</interest_rate>
+		<due_date>2021-11-03 00:00:00</due_date>
+		<payment_due>4102.95</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>3551.28</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>41</id>
+		<users_id>54</users_id>
+		<balance>-85834.85</balance>
+		<interest_rate>0.07815</interest_rate>
+		<due_date>2021-10-21 00:00:00</due_date>
+		<payment_due>3543.48</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>3354.15</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>42</id>
+		<users_id>45</users_id>
+		<balance>-263912.49</balance>
+		<interest_rate>0.04662</interest_rate>
+		<due_date>2021-11-06 00:00:00</due_date>
+		<payment_due>6312.80</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>6151.45</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>43</id>
+		<users_id>38</users_id>
+		<balance>-73382.36</balance>
+		<interest_rate>0.07972</interest_rate>
+		<due_date>2021-11-04 00:00:00</due_date>
+		<payment_due>3454.52</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>2924.91</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>44</id>
+		<users_id>60</users_id>
+		<balance>-34078.66</balance>
+		<interest_rate>0.07897</interest_rate>
+		<due_date>2021-10-10 00:00:00</due_date>
+		<payment_due>1423.27</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>1345.65</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>45</id>
+		<users_id>38</users_id>
+		<balance>-336989.52</balance>
+		<interest_rate>0.05058</interest_rate>
+		<due_date>2021-11-01 00:00:00</due_date>
+		<payment_due>8842.59</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>8521.92</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>46</id>
+		<users_id>11</users_id>
+		<balance>-207383.99</balance>
+		<interest_rate>0.04223</interest_rate>
+		<due_date>2021-10-17 00:00:00</due_date>
+		<payment_due>4697.91</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>4378.71</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>47</id>
+		<users_id>37</users_id>
+		<balance>-1126.75</balance>
+		<interest_rate>0.04043</interest_rate>
+		<due_date>2021-10-09 00:00:00</due_date>
+		<payment_due>25.57</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>22.78</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>0</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>48</id>
+		<users_id>52</users_id>
+		<balance>-114375.54</balance>
+		<interest_rate>0.05209</interest_rate>
+		<due_date>2021-10-17 00:00:00</due_date>
+		<payment_due>2984.39</payment_due>
+		<loan_type>Student</loan_type>
+		<monthly_payment>2978.88</monthly_payment>
+		<active>1</active>
+		<approved>1</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>49</id>
+		<users_id>49</users_id>
+		<balance>-380103.28</balance>
+		<interest_rate>0.05042</interest_rate>
+		<due_date>2021-10-10 00:00:00</due_date>
+		<payment_due>11450.04</payment_due>
+		<loan_type>Morgage</loan_type>
+		<monthly_payment>9582.33</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+
+	<ROW>
+		<id>50</id>
+		<users_id>13</users_id>
+		<balance>-284601.62</balance>
+		<interest_rate>0.03297</interest_rate>
+		<due_date>2021-10-09 00:00:00</due_date>
+		<payment_due>5108.41</payment_due>
+		<loan_type>Auto</loan_type>
+		<monthly_payment>4691.30</monthly_payment>
+		<active>0</active>
+		<approved>0</approved>
+		<confirmed>1</confirmed>
+	</ROW>
+</DATA>
