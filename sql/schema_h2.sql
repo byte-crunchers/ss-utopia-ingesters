@@ -26,7 +26,7 @@ SET SCHEMA bytecrunchers;
 -- Table structure for table "account_types"
 --
 
-DROP TABLE IF EXISTS "account_types";
+
 
 CREATE TABLE "account_types" (
   "id" varchar(45) NOT NULL,
@@ -45,7 +45,6 @@ CREATE TABLE "account_types" (
 -- Table structure for table "accounts"
 --
 
-DROP TABLE IF EXISTS "accounts";
 
 CREATE TABLE "accounts" (
   "id" int unsigned NOT NULL ,
@@ -69,7 +68,6 @@ CREATE TABLE "accounts" (
 -- Table structure for table "appointments"
 --
 
-DROP TABLE IF EXISTS "appointments";
 
 CREATE TABLE "appointments" (
   "users_id_ap" int unsigned NOT NULL,
@@ -86,7 +84,6 @@ CREATE TABLE "appointments" (
 -- Table structure for table "branches"
 --
 
-DROP TABLE IF EXISTS "branches";
 
 CREATE TABLE "branches" (
   "id" int unsigned NOT NULL ,
@@ -105,7 +102,6 @@ CREATE TABLE "branches" (
 -- Table structure for table "card_transactions"
 --
 
-DROP TABLE IF EXISTS "card_transactions";
 
 CREATE TABLE "card_transactions" (
   "id" int unsigned NOT NULL ,
@@ -129,7 +125,6 @@ CREATE TABLE "card_transactions" (
 -- Table structure for table "cards"
 --
 
-DROP TABLE IF EXISTS "cards";
 
 CREATE TABLE "cards" (
   "accounts_id" int unsigned NOT NULL,
@@ -148,7 +143,6 @@ CREATE TABLE "cards" (
 -- Table structure for table "confirmation"
 --
 
-DROP TABLE IF EXISTS "confirmation";
 
 CREATE TABLE "confirmation" (
   "id" int unsigned NOT NULL ,
@@ -169,7 +163,6 @@ CREATE TABLE "confirmation" (
 -- Table structure for table "loan_payments"
 --
 
-DROP TABLE IF EXISTS "loan_payments";
 
 CREATE TABLE "loan_payments" (
   "id" int unsigned NOT NULL ,
@@ -188,7 +181,6 @@ CREATE TABLE "loan_payments" (
 -- Table structure for table "loan_types"
 --
 
-DROP TABLE IF EXISTS "loan_types";
 
 CREATE TABLE "loan_types" (
   "id" varchar(45) NOT NULL,
@@ -207,7 +199,6 @@ CREATE TABLE "loan_types" (
 -- Table structure for table "loans"
 --
 
-DROP TABLE IF EXISTS "loans";
 
 CREATE TABLE "loans" (
   "id" int unsigned NOT NULL ,
@@ -231,7 +222,6 @@ CREATE TABLE "loans" (
 -- Table structure for table "transactions"
 --
 
-DROP TABLE IF EXISTS "transactions";
 
 CREATE TABLE "transactions" (
   "id" int unsigned NOT NULL ,
@@ -251,7 +241,6 @@ CREATE TABLE "transactions" (
 -- Table structure for table "users"
 --
 
-DROP TABLE IF EXISTS "users";
 
 CREATE TABLE "users" (
   "id" int unsigned NOT NULL ,

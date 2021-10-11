@@ -73,7 +73,6 @@ def test_populate_dependencies(connect_h2):
     curs.execute("SELECT count(*) FROM loan_types")
     assert (3 == curs.fetchall()[0][0])
 
-
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
     curs = connect_h2.cursor()
