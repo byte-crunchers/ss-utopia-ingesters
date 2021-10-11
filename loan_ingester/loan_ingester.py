@@ -48,7 +48,6 @@ def populate_loans(loan_data, conn):
             print("users_id or loan_type Dependecy missing or Illegal Null: ")
             loan.print_loan()
             print("Skipping addition..\n")
-            # traceback.print_exc()
         except Exception():
             traceback.print_exc()
 
