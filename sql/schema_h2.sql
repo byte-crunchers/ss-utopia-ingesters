@@ -22,6 +22,11 @@ SET SCHEMA bytecrunchers;
 -- Table structure for table "account_types"
 --
 
+--
+-- Table structure for table "account_types"
+--
+
+DROP TABLE IF EXISTS "account_types";
 
 CREATE TABLE "account_types" (
   "id" varchar(45) NOT NULL,
@@ -40,6 +45,7 @@ CREATE TABLE "account_types" (
 -- Table structure for table "accounts"
 --
 
+DROP TABLE IF EXISTS "accounts";
 
 CREATE TABLE "accounts" (
   "id" int unsigned NOT NULL ,
@@ -50,7 +56,9 @@ CREATE TABLE "accounts" (
   "due_date" date DEFAULT NULL,
   "credit_limit" int DEFAULT NULL,
   "debt_interest" decimal(5,5) unsigned NOT NULL,
-  "active" tinyint NOT NULL);
+  "active" tinyint NOT NULL,
+  "approved" tinyint NOT NULL,
+  "confirmed" tinyint NOT NULL);
 
 --
 -- Dumping data for table "accounts"
@@ -61,6 +69,7 @@ CREATE TABLE "accounts" (
 -- Table structure for table "appointments"
 --
 
+DROP TABLE IF EXISTS "appointments";
 
 CREATE TABLE "appointments" (
   "users_id_ap" int unsigned NOT NULL,
@@ -77,13 +86,15 @@ CREATE TABLE "appointments" (
 -- Table structure for table "branches"
 --
 
+DROP TABLE IF EXISTS "branches";
 
 CREATE TABLE "branches" (
   "id" int unsigned NOT NULL ,
   "street_address" varchar(95) NOT NULL,
   "city" varchar(35) NOT NULL,
-  "state" varchar(2) NOT NULL,
-  "zip" varchar(5) NOT NULL);
+  "state" char(2) NOT NULL,
+  "zip" varchar(5) NOT NULL
+);
 
 --
 -- Dumping data for table "branches"
@@ -94,10 +105,11 @@ CREATE TABLE "branches" (
 -- Table structure for table "card_transactions"
 --
 
+DROP TABLE IF EXISTS "card_transactions";
 
 CREATE TABLE "card_transactions" (
   "id" int unsigned NOT NULL ,
-  "card_num" bigint unsigned NOT NULL,
+  "card_num" decimal(16,0) unsigned NOT NULL,
   "merchant_account_id" int unsigned NOT NULL,
   "memo" varchar(55) NOT NULL,
   "transfer_value" decimal(10,2) NOT NULL,
@@ -105,7 +117,8 @@ CREATE TABLE "card_transactions" (
   "cvc1" smallint unsigned DEFAULT NULL,
   "cvc2" smallint unsigned DEFAULT NULL,
   "location" char(2) DEFAULT NULL,
-  "time_stamp" datetime NOT NULL);
+  "time_stamp" datetime NOT NULL,
+  "status" tinyint NOT NULL);
 
 --
 -- Dumping data for table "card_transactions"
@@ -116,10 +129,11 @@ CREATE TABLE "card_transactions" (
 -- Table structure for table "cards"
 --
 
+DROP TABLE IF EXISTS "cards";
 
 CREATE TABLE "cards" (
   "accounts_id" int unsigned NOT NULL,
-  "card_num" bigint unsigned NOT NULL,
+  "card_num" decimal(16,0) unsigned NOT NULL,
   "pin" smallint unsigned DEFAULT NULL,
   "cvc1" smallint unsigned DEFAULT NULL,
   "cvc2" smallint unsigned DEFAULT NULL,
@@ -131,16 +145,39 @@ CREATE TABLE "cards" (
 
 
 --
+-- Table structure for table "confirmation"
+--
+
+DROP TABLE IF EXISTS "confirmation";
+
+CREATE TABLE "confirmation" (
+  "id" int unsigned NOT NULL ,
+  "confirmed_at" datetime DEFAULT NULL,
+  "created_at" datetime NOT NULL,
+  "expires_at" datetime NOT NULL,
+  "token" binary(16) NOT NULL,
+  "user" int unsigned DEFAULT NULL,
+  "loan" int unsigned DEFAULT NULL,
+  "account" int unsigned DEFAULT NULL);
+
+--
+-- Dumping data for table "confirmation"
+--
+
+
+--
 -- Table structure for table "loan_payments"
 --
 
+DROP TABLE IF EXISTS "loan_payments";
 
 CREATE TABLE "loan_payments" (
   "id" int unsigned NOT NULL ,
   "loan_id" int unsigned NOT NULL,
   "account_id" int unsigned NOT NULL,
   "amount" decimal(10,2) NOT NULL,
-  "time_stamp" datetime NOT NULL);
+  "time_stamp" datetime NOT NULL,
+  "status" tinyint NOT NULL);
 
 --
 -- Dumping data for table "loan_payments"
@@ -148,30 +185,18 @@ CREATE TABLE "loan_payments" (
 
 
 --
--- Table structure for table "loan_type"
---
-
-
-CREATE TABLE "loan_type" (
-  "id" varchar(45) NOT NULL,
-  "upper_range" decimal(4,4) NOT NULL,
-  "lower_range" decimal(4,4) NOT NULL);
-
---
--- Dumping data for table "loan_type"
---
-
-
---
 -- Table structure for table "loan_types"
 --
 
+DROP TABLE IF EXISTS "loan_types";
 
 CREATE TABLE "loan_types" (
   "id" varchar(45) NOT NULL,
   "upper_range" decimal(4,4) unsigned NOT NULL,
   "lower_range" decimal(4,4) unsigned NOT NULL,
-  "late_fee" decimal(6,2) unsigned NOT NULL);
+  "late_fee" decimal(6,2) unsigned NOT NULL,
+  "term_min" smallint NOT NULL,
+  "term_max" smallint NOT NULL);
 
 --
 -- Dumping data for table "loan_types"
@@ -182,6 +207,7 @@ CREATE TABLE "loan_types" (
 -- Table structure for table "loans"
 --
 
+DROP TABLE IF EXISTS "loans";
 
 CREATE TABLE "loans" (
   "id" int unsigned NOT NULL ,
@@ -192,7 +218,9 @@ CREATE TABLE "loans" (
   "payment_due" decimal(8,2) unsigned NOT NULL,
   "loan_type" varchar(45) NOT NULL,
   "monthly_payment" decimal(7,2) unsigned NOT NULL,
-  "active" tinyint NOT NULL);
+  "active" tinyint NOT NULL,
+  "approved" tinyint NOT NULL,
+  "confirmed" tinyint NOT NULL);
 
 --
 -- Dumping data for table "loans"
@@ -203,6 +231,7 @@ CREATE TABLE "loans" (
 -- Table structure for table "transactions"
 --
 
+DROP TABLE IF EXISTS "transactions";
 
 CREATE TABLE "transactions" (
   "id" int unsigned NOT NULL ,
@@ -210,7 +239,8 @@ CREATE TABLE "transactions" (
   "destination_account" int unsigned NOT NULL,
   "memo" varchar(55) NOT NULL,
   "transfer_value" decimal(10,2) NOT NULL,
-  "time_stamp" datetime NOT NULL);
+  "time_stamp" datetime NOT NULL,
+  "status" tinyint NOT NULL);
 
 --
 -- Dumping data for table "transactions"
@@ -221,16 +251,25 @@ CREATE TABLE "transactions" (
 -- Table structure for table "users"
 --
 
+DROP TABLE IF EXISTS "users";
 
 CREATE TABLE "users" (
   "id" int unsigned NOT NULL ,
-  "username" varchar(50) NOT NULL,
+  "username" varchar(16) NOT NULL,
   "email" varchar(50) NOT NULL,
   "password" char(60) NOT NULL,
   "first_name" varchar(50) NOT NULL,
   "last_name" varchar(50) NOT NULL,
   "is_admin" tinyint NOT NULL,
-  "active" tinyint NOT NULL);
+  "ssn" decimal(9,0) DEFAULT NULL,
+  "active" tinyint DEFAULT NULL,
+  "confirmed" tinyint DEFAULT NULL,
+  "phone" decimal(10,0) DEFAULT NULL,
+  "dob" date DEFAULT NULL,
+  "street_address" varchar(95) DEFAULT NULL,
+  "city" varchar(35) DEFAULT NULL,
+  "state" char(2) DEFAULT NULL,
+  "zip" varchar(5) DEFAULT NULL);
 
 --
 -- Dumping data for table "users"
@@ -243,7 +282,7 @@ CREATE TABLE "users" (
 
 
 
--- Dump completed on 2021-09-17 15:01:59;
+-- Dump completed on 2021-10-02 22:06:10;
 
 
 
@@ -259,7 +298,7 @@ ALTER TABLE appointments ADD FOREIGN KEY ("users_id_ap") REFERENCES "users" ("id
 ALTER TABLE branches MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE branches ADD PRIMARY KEY ("id");
 ALTER TABLE branches ADD UNIQUE KEY "branches_branches_id_UNIQUE" ("id");
-ALTER TABLE branches ADD UNIQUE KEY "branches_location" ("street_address", "city", "state", "zip");
+ALTER TABLE branches ADD UNIQUE KEY "branches_location_UNIQUE" ("street_address");
 ALTER TABLE card_transactions MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE card_transactions ADD PRIMARY KEY ("id");
 ALTER TABLE card_transactions ADD UNIQUE KEY "card_transactions_card_transactions_id_UNIQUE" ("id");
@@ -267,15 +306,19 @@ ALTER TABLE card_transactions ADD FOREIGN KEY ("card_num") REFERENCES "cards" ("
 ALTER TABLE card_transactions ADD FOREIGN KEY ("merchant_account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE cards ADD PRIMARY KEY ("card_num");
 ALTER TABLE cards ADD UNIQUE KEY "cards_cards_accounts_id_UNIQUE" ("accounts_id");
-ALTER TABLE cards ADD UNIQUE KEY "cards_card_num_UNIQUE" ("card_num");
 ALTER TABLE cards ADD FOREIGN KEY ("accounts_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE confirmation MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
+ALTER TABLE confirmation ADD PRIMARY KEY ("id");
+ALTER TABLE confirmation ADD UNIQUE KEY "confirmation_id_UNIQUE" ("id");
+ALTER TABLE confirmation ADD UNIQUE KEY "confirmation_token_UNIQUE" ("token");
+ALTER TABLE confirmation ADD FOREIGN KEY ("account") REFERENCES "accounts" ("id");
+ALTER TABLE confirmation ADD FOREIGN KEY ("loan") REFERENCES "loans" ("id");
+ALTER TABLE confirmation ADD FOREIGN KEY ("user") REFERENCES "users" ("id");
 ALTER TABLE loan_payments MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE loan_payments ADD PRIMARY KEY ("id");
 ALTER TABLE loan_payments ADD UNIQUE KEY "loan_payments_loan_pay_ID_UNIQUE" ("id");
 ALTER TABLE loan_payments ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE loan_payments ADD FOREIGN KEY ("loan_id") REFERENCES "loans" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE loan_type ADD PRIMARY KEY ("id");
-ALTER TABLE loan_type ADD UNIQUE KEY "loan_type_id_UNIQUE" ("id");
 ALTER TABLE loan_types ADD PRIMARY KEY ("id");
 ALTER TABLE loan_types ADD UNIQUE KEY "loan_types_loan_type_id_UNIQUE" ("id");
 ALTER TABLE loans MODIFY "id" int unsigned NOT NULL AUTO_INCREMENT;
