@@ -28,7 +28,6 @@ class LoanPayment:
 def populate_loan_payments(lp_data, ing_conn):
     row_count = 0
     curs = ing_conn.cursor()
-    dd_count = 0
     curs = ing_conn.cursor()
     query = "INSERT INTO loan_payments(loan_id, account_id, amount, time_stamp, status) VALUES(?, ?, ?, ?, ?) "
     for lp in lp_data:
@@ -41,12 +40,10 @@ def populate_loan_payments(lp_data, ing_conn):
             else:
                 raise Exception
             # Check for Duplicates and Nulls
-        except jaydebeapi.DatabaseError:
-            print("Illegal Null on row " + str(row_count) + ":")
+        except (jaydebeapi.DatabaseError, Exception):
+            print("Illegal Null or Constraint Error on row " + str(row_count) + ":")
             lp.print_user()
             print("Skipping addition..\n")
-        except Exception:
-            traceback.print_exc()
 
 
 # Parse csv into users

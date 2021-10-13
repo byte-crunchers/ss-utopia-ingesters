@@ -34,9 +34,9 @@ def connect():
 
 if __name__ == '__main__':
     sql_conn = connect()
-    # lpi.read_file(csv_path, sql_conn)
-    # lpi.read_file(json_path, sql_conn)
-    # lpi.read_file(xml_path, sql_conn)
+    lpi.read_file(csv_path, sql_conn)
+    lpi.read_file(json_path, sql_conn)
+    lpi.read_file(xml_path, sql_conn)
     lpi.read_file(xlsx_path, sql_conn)
     sql_conn.commit()
     sql_conn.close()
