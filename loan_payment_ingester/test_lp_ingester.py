@@ -60,17 +60,10 @@ def test_create_schema(connect_h2):
     assert connect_h2
 
 
-# Test populate dependencies
-def test_populate_dependencies(connect_h2):
-    lpi.execute_scripts_from_file(user_path, connect_h2)
-    lpi.execute_scripts_from_file(loan_path, connect_h2)
-    lpi.execute_scripts_from_file(account_path, connect_h2)
-    assert connect_h2
-
-
 # Test parsing csv file and adding to database
 def test_csv_ingest(connect_h2):
     curs = connect_h2.cursor()
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
     curs.execute("DELETE FROM loan_payments")
     lpi.read_file(csv_path, connect_h2)
     curs.execute("SELECT COUNT(*) FROM loan_payments")
@@ -81,11 +74,13 @@ def test_csv_ingest(connect_h2):
     curs.execute("DELETE FROM loan_payments")
     curs.execute("SELECT COUNT(*) FROM loan_payments")
     assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
 
 
 # Test parsing json file and adding to database
 def test_json_ingest(connect_h2):
     curs = connect_h2.cursor()
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
     curs.execute("DELETE FROM loan_payments")
     lpi.read_file(json_path, connect_h2)
     curs.execute("SELECT COUNT(*) FROM loan_payments")
@@ -96,11 +91,13 @@ def test_json_ingest(connect_h2):
     curs.execute("DELETE FROM loan_payments")
     curs.execute("SELECT COUNT(*) FROM loan_payments")
     assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
 
 
 # Test parsing xml file and adding to database
 def test_xml_ingest(connect_h2):
     curs = connect_h2.cursor()
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
     curs.execute("DELETE FROM loan_payments")
     lpi.read_file(xml_path, connect_h2)
     curs.execute("SELECT COUNT(*) FROM loan_payments")
@@ -111,11 +108,13 @@ def test_xml_ingest(connect_h2):
     curs.execute("DELETE FROM loan_payments")
     curs.execute("SELECT COUNT(*) FROM loan_payments")
     assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
 
 
 # Test parsing xlsx file and adding to database
 def test_xlsx_ingest(connect_h2):
     curs = connect_h2.cursor()
+    curs.execute("SET REFERENTIAL_INTEGRITY FALSE")
     curs.execute("DELETE FROM loan_payments")
     lpi.read_file(xlsx_path, connect_h2)
     curs.execute("SELECT COUNT(*) FROM loan_payments")
@@ -148,6 +147,7 @@ def test_xlsx_ingest(connect_h2):
     curs.execute("DELETE FROM loan_payments")
     curs.execute("SELECT COUNT(*) FROM loan_payments")
     assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    curs.execute("SET REFERENTIAL_INTEGRITY TRUE")
     connect_h2.rollback()
 
 
