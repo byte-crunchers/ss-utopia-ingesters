@@ -13,6 +13,7 @@ mysql_loc = os.environ.get("MYSQL_LOC")
 # Relative Paths
 script_dir = os.path.dirname(__file__)
 schema_path = os.path.join(script_dir, "../sql/schema_h2.sql")
+user_path = os.path.join(script_dir, "../sql/Insert_Users.sql")
 loan_path = os.path.join(script_dir, "../sql/Insert_Loans.sql")
 account_path = os.path.join(script_dir, "../sql/Insert_Accounts.sql")
 csv_path = os.path.join(script_dir, "../dummy_data/loan_payment_folder/one_hundred_loan_payments.csv")
@@ -61,6 +62,7 @@ def test_create_schema(connect_h2):
 
 # Test populate dependencies
 def test_populate_dependencies(connect_h2):
+    lpi.execute_scripts_from_file(user_path, connect_h2)
     lpi.execute_scripts_from_file(loan_path, connect_h2)
     lpi.execute_scripts_from_file(account_path, connect_h2)
     assert connect_h2
@@ -146,6 +148,7 @@ def test_xlsx_ingest(connect_h2):
     curs.execute("DELETE FROM loan_payments")
     curs.execute("SELECT COUNT(*) FROM loan_payments")
     assert (0 == curs.fetchmany(size=1)[0][0])  # Test that the table is empty
+    connect_h2.rollback()
 
 
 if __name__ == '__main__':
